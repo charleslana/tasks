@@ -6,16 +6,14 @@ function NavbarComponent(): JSX.Element {
   const { tasks, dispatch } = useContext(TaskContext);
 
   const handleClick = () => {
-    if (dispatch !== undefined) {
-      dispatch({
-        type: ActionEnum.ADD_TASK,
-        task: {
-          id: 1,
-          description: 'Hello Dev',
-          isChecked: false,
-        },
-      });
-    }
+    dispatch?.({
+      type: ActionEnum.ADD_TASK,
+      task: {
+        id: 1,
+        description: 'Hello Dev',
+        isChecked: false,
+      },
+    });
   };
 
   return (
