@@ -1,6 +1,6 @@
 import ActionEnum from '../enumerations/ActionEnum';
 
-export default interface ActionInterface {
+export default interface ActionTaskInterface {
   id?: number;
   type: ActionEnum;
   task?: {

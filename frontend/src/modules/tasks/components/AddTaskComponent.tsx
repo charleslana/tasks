@@ -12,18 +12,23 @@ function AddTaskComponent(): JSX.Element {
     inputRef.current?.focus();
   });
 
-  const submitAddTask = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!description.trim()) {
-      return alert('Preencha o campo da descrição.');
-    }
+  const checkExist = () => {
     const existTask = tasks.some(
       task =>
         task.description.toLowerCase() === description.toLowerCase().trim()
     );
     if (existTask) {
-      return alert('Já existe uma tarefa com a mesma descrição adicionada.');
+      throw new Error('Já existe uma tarefa com a mesma descrição adicionada.');
     }
+  };
+
+  const checkIsNotEmpty = (value: string) => {
+    if (!value.trim()) {
+      throw new Error('Preencha o campo da descrição.');
+    }
+  };
+
+  const dispatchAddTask = () => {
     dispatch?.({
       type: ActionEnum.ADD_TASK,
       task: {
@@ -32,8 +37,21 @@ function AddTaskComponent(): JSX.Element {
         completed: false,
       },
     });
-    setDescription('');
-    setCount(count + 1);
+  };
+
+  const submitAddTask = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      checkIsNotEmpty(description);
+      checkExist();
+      dispatchAddTask();
+      setDescription('');
+      setCount(count + 1);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
   };
 
   return (

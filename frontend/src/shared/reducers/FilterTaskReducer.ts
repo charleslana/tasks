@@ -1,10 +1,10 @@
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
-import StateInterface from '../interfaces/StateInterface';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
 
 const FilterTaskReducer = (
-  state: StateInterface[],
+  state: StateTaskInterface[],
   action: FilterTaskEnum
-): StateInterface[] => {
+): StateTaskInterface[] => {
   switch (action) {
     case FilterTaskEnum.SHOW_ALL:
       return state;

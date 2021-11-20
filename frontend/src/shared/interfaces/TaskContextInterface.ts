@@ -1,10 +1,10 @@
-import ActionInterface from './ActionInterface';
+import ActionTaskInterface from './ActionTaskInterface';
 import { Dispatch } from 'react';
-import StateInterface from './StateInterface';
+import StateTaskInterface from './StateTaskInterface';
 
 export default interface TaskContextInterface {
-  tasks: StateInterface[];
-  sortedTasks?: StateInterface[];
-  dispatch?: Dispatch<ActionInterface>;
-  finishedTasks?: StateInterface[];
+  tasks: StateTaskInterface[];
+  sortedTasks?: StateTaskInterface[];
+  dispatch?: Dispatch<ActionTaskInterface>;
+  finishedTasks?: StateTaskInterface[];
 }

@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
-import PropsInterface from '../interfaces/PropsInterface';
-import StateInterface from '../interfaces/StateInterface';
+import PropsContextInterface from '../interfaces/PropsContextInterface';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
 import TaskContextInterface from '../interfaces/TaskContextInterface';
 import taskReducer from '../reducers/TaskReducer';
 
@@ -8,15 +8,13 @@ export const TaskContext = createContext<TaskContextInterface>({
   tasks: [],
 });
 
-const TaskContextProvider = (props: PropsInterface): JSX.Element => {
-  const initialState: StateInterface[] = [];
+const TaskContextProvider = (props: PropsContextInterface): JSX.Element => {
+  const initialState: StateTaskInterface[] = [];
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
-
-  const sortedTasks: StateInterface[] = tasks.sort(
-    (t: StateInterface, f: StateInterface) =>
+  const sortedTasks: StateTaskInterface[] = tasks.sort(
+    (t: StateTaskInterface, f: StateTaskInterface) =>
       f.completed === t.completed ? 0 : f.completed ? -1 : 1
   );
-
   return (
     <TaskContext.Provider value={{ tasks, sortedTasks, dispatch }}>
       {props.children}

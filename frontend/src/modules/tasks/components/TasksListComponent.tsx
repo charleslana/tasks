@@ -3,7 +3,7 @@ import ActionEnum from '../../../shared/enumerations/ActionEnum';
 import FilterTaskComponent from './FilterTaskComponent';
 import FilterTaskEnum from '../../../shared/enumerations/FilterTaskEnum';
 import FilterTaskReducer from '../../../shared/reducers/FilterTaskReducer';
-import StateInterface from '../../../shared/interfaces/StateInterface';
+import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
 
 function TasksListComponent(): JSX.Element {
@@ -19,7 +19,55 @@ function TasksListComponent(): JSX.Element {
     setTasks(sortedTasks);
   }, [sortedTasks]);
 
-  const handleFinish = (task: StateInterface) => {
+  const checkExist = (task: StateTaskInterface) => {
+    const existTask = tasks?.some(
+      item =>
+        item.description.toLowerCase() === description.toLowerCase().trim() &&
+        item.id !== task.id
+    );
+    if (existTask) {
+      throw new Error('Já existe uma tarefa com a mesma descrição adicionada.');
+    }
+  };
+
+  const checkIsNotEmpty = (value: string) => {
+    if (!value.trim()) {
+      throw new Error('Preencha o campo da descrição.');
+    }
+  };
+
+  const clearTasks = () => {
+    setIsCheck([]);
+  };
+
+  const dispatchUpdateTask = (task: StateTaskInterface) => {
+    dispatch?.({
+      type: ActionEnum.UPDATE_TASK,
+      task: {
+        id: task.id,
+        description: description,
+        completed: task.completed,
+      },
+    });
+  };
+
+  const handleClickCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, checked } = e.target;
+    setIsCheck([...isCheck, id]);
+    if (!checked) {
+      setIsCheck(isCheck.filter(item => item !== id));
+    }
+  };
+
+  const handleClickDelete = (id: number) => {
+    dispatch?.({
+      type: ActionEnum.REMOVE_TASK,
+      id: id,
+    });
+    setIsCheck(isCheck.filter(item => item !== id.toString()));
+  };
+
+  const handleFinish = (task: StateTaskInterface) => {
     dispatch?.({
       type: ActionEnum.CHECK_TASK,
       task: {
@@ -32,60 +80,16 @@ function TasksListComponent(): JSX.Element {
     setId(0);
   };
 
-  const showEdit = (task: StateInterface) => {
-    setDescription(task.description);
-    setId(task.id);
-  };
-
-  const submitUpdate = (
-    e: React.FormEvent<HTMLFormElement>,
-    task: StateInterface
-  ) => {
-    e.preventDefault();
-    if (!description.trim()) {
-      return alert('Preencha o campo da descrição.');
-    }
-    const existTask = tasks?.some(
-      item =>
-        item.description.toLowerCase() === description.toLowerCase().trim() &&
-        item.id !== task.id
-    );
-    if (existTask) {
-      return alert('Já existe uma tarefa com a mesma descrição adicionada.');
-    }
-    dispatch?.({
-      type: ActionEnum.UPDATE_TASK,
-      task: {
-        id: task.id,
-        description: description,
-        completed: task.completed,
-      },
+  const handleFinishAll = () => {
+    isCheck.forEach(id => {
+      if (tasks) {
+        const taskIndex = tasks.findIndex(
+          (task: StateTaskInterface) => task.id === parseInt(id)
+        );
+        handleFinish(tasks[taskIndex]);
+      }
     });
-    setId(0);
-    setDescription('');
-  };
-
-  const handleClickDelete = (id: number) => {
-    dispatch?.({
-      type: ActionEnum.REMOVE_TASK,
-      id: id,
-    });
-    setIsCheck(isCheck.filter(item => item !== id.toString()));
-  };
-
-  const filterTask = (type: FilterTaskEnum) => {
-    if (sortedTasks) {
-      const filteredTask = FilterTaskReducer(sortedTasks, type);
-      setTasks(filteredTask);
-    }
-  };
-
-  const handleClickCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, checked } = e.target;
-    setIsCheck([...isCheck, id]);
-    if (!checked) {
-      setIsCheck(isCheck.filter(item => item !== id));
-    }
+    setIsCheck([]);
   };
 
   const handleClickSelectAll = () => {
@@ -103,20 +107,34 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const handleFinishAll = () => {
-    isCheck.forEach(id => {
-      if (tasks) {
-        const taskIndex = tasks.findIndex(
-          (task: StateInterface) => task.id === parseInt(id)
-        );
-        handleFinish(tasks[taskIndex]);
-      }
-    });
-    setIsCheck([]);
+  const filterTask = (type: FilterTaskEnum) => {
+    if (sortedTasks) {
+      const filteredTask = FilterTaskReducer(sortedTasks, type);
+      setTasks(filteredTask);
+    }
   };
 
-  const clearTasks = () => {
-    setIsCheck([]);
+  const showEdit = (task: StateTaskInterface) => {
+    setDescription(task.description);
+    setId(task.id);
+  };
+
+  const submitUpdate = (
+    e: React.FormEvent<HTMLFormElement>,
+    task: StateTaskInterface
+  ) => {
+    e.preventDefault();
+    try {
+      checkIsNotEmpty(description);
+      checkExist(task);
+      dispatchUpdateTask(task);
+      setId(0);
+      setDescription('');
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
   };
 
   return (
@@ -132,7 +150,7 @@ function TasksListComponent(): JSX.Element {
           </tr>
         </thead>
         <tbody>
-          {tasks?.map((task: StateInterface) => (
+          {tasks?.map((task: StateTaskInterface) => (
             <tr key={task.id}>
               <td>
                 {!task.completed ? (

@@ -1,11 +1,11 @@
 import ActionEnum from '../enumerations/ActionEnum';
-import ActionInterface from '../interfaces/ActionInterface';
-import StateInterface from '../interfaces/StateInterface';
+import ActionTaskInterface from '../interfaces/ActionTaskInterface';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
 
 const taskReducer = (
-  state: StateInterface[],
-  action: ActionInterface
-): StateInterface[] => {
+  state: StateTaskInterface[],
+  action: ActionTaskInterface
+): StateTaskInterface[] => {
   switch (action.type) {
     case ActionEnum.ADD_TASK: {
       if (action.task) {
@@ -16,14 +16,14 @@ const taskReducer = (
     case ActionEnum.CHECK_TASK: {
       if (action.task) {
         const taskIndex = state.findIndex(
-          (task: StateInterface) => task.id === action.task?.id
+          (task: StateTaskInterface) => task.id === action.task?.id
         );
         state[taskIndex].completed = action.task.completed;
       }
-      return state.filter((task: StateInterface) => task.id !== action.id);
+      return state.filter((task: StateTaskInterface) => task.id !== action.id);
     }
     case ActionEnum.REMOVE_TASK:
-      return state.filter((task: StateInterface) => task.id !== action.id);
+      return state.filter((task: StateTaskInterface) => task.id !== action.id);
     case ActionEnum.UPDATE_TASK:
       return state.map(task =>
         task.id === action.task?.id
