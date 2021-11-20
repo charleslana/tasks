@@ -1,9 +1,12 @@
 import './App.css';
+import NavbarComponent from './components/NavbarComponent';
+import TaskContextProvider from './contexts/TaskContext';
 
-function App() {
+function App(): JSX.Element {
   return (
-    <div>
-    </div>
+    <TaskContextProvider>
+      <NavbarComponent></NavbarComponent>
+    </TaskContextProvider>
   );
 }
 
