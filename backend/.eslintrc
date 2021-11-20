@@ -12,6 +12,7 @@
   "rules": {
     "no-console": "warn",
     "spaced-comment": "warn",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "sort-imports": "warn"
   }
 }

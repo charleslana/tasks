@@ -1,8 +1,8 @@
-import { getCustomRepository } from 'typeorm';
 import AppError from '../../../shared/errors/AppError';
 import ShowTaskInterface from '../interfaces/ShowTaskInterface';
 import Task from '../typeorm/entities/Task';
 import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import { getCustomRepository } from 'typeorm';
 
 class ShowTaskService {
   public async execute({ id }: ShowTaskInterface): Promise<Task> {

@@ -1,6 +1,6 @@
+import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 import TaskController from '../controllers/TaskController';
-import { celebrate, Joi, Segments } from 'celebrate';
 
 const taskRoutes = Router();
 const taskController = new TaskController();

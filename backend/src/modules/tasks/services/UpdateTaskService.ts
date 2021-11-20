@@ -1,10 +1,10 @@
-import { getCustomRepository } from 'typeorm';
 import AppError from '../../../shared/errors/AppError';
-import TaskStatusEnum from '../enumerations/TaskStatusEnum';
 import StatusTaskInterface from '../interfaces/StatusTaskInterface';
-import UpdateTaskInterface from '../interfaces/UpdateTaskInterface';
 import Task from '../typeorm/entities/Task';
 import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import TaskStatusEnum from '../enumerations/TaskStatusEnum';
+import UpdateTaskInterface from '../interfaces/UpdateTaskInterface';
+import { getCustomRepository } from 'typeorm';
 
 class UpdateTaskService {
   private checkNotFound(task: Task | undefined) {

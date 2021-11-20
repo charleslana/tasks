@@ -1,7 +1,7 @@
-import { getCustomRepository } from 'typeorm';
 import AppError from '../../../shared/errors/AppError';
 import DeleteTaskInterface from '../interfaces/DeleteTaskInterface';
 import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import { getCustomRepository } from 'typeorm';
 
 class DeleteTaskService {
   public async execute({ id }: DeleteTaskInterface): Promise<void> {

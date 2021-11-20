@@ -1,6 +1,6 @@
-import { getCustomRepository } from 'typeorm';
 import Task from '../typeorm/entities/Task';
 import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import { getCustomRepository } from 'typeorm';
 
 class ListTaskService {
   public async execute(): Promise<Task[]> {
