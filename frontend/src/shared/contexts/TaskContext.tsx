@@ -8,7 +8,7 @@ export const TaskContext = createContext<TaskContextInterface>({
   tasks: [],
 });
 
-const TaskContextProvider = (props: PropsInterface): any => {
+const TaskContextProvider = (props: PropsInterface): JSX.Element => {
   const initialState: StateInterface[] = [];
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
 

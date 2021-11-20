@@ -2,10 +2,17 @@ import ActionEnum from '../enumerations/ActionEnum';
 import ActionInterface from '../interfaces/ActionInterface';
 import StateInterface from '../interfaces/StateInterface';
 
-const taskReducer = (state: StateInterface[], action: ActionInterface): any => {
+const taskReducer = (
+  state: StateInterface[],
+  action: ActionInterface
+): StateInterface[] => {
   switch (action.type) {
-    case ActionEnum.ADD_TASK:
-      return [...state, action.task];
+    case ActionEnum.ADD_TASK: {
+      if (action.task) {
+        return [...state, action.task];
+      }
+      return state;
+    }
     case ActionEnum.CHECK_TASK: {
       if (action.task) {
         const taskIndex = state.findIndex(

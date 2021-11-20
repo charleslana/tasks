@@ -5,6 +5,7 @@ import { TaskContext } from '../../../shared/contexts/TaskContext';
 
 interface IProps {
   filterTask: (filter: FilterTaskEnum) => void;
+  clearTasks: () => void;
 }
 
 function FilterTaskComponent(props: IProps): JSX.Element {
@@ -14,6 +15,7 @@ function FilterTaskComponent(props: IProps): JSX.Element {
     dispatch?.({
       type: ActionEnum.REMOVE_ALL_TASK,
     });
+    props.clearTasks();
   };
 
   return (

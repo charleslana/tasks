@@ -29,6 +29,7 @@ function TasksListComponent(): JSX.Element {
       },
     });
     setIsCheck(isCheck.filter(item => item !== task.id.toString()));
+    setId(0);
   };
 
   const showEdit = (task: StateInterface) => {
@@ -36,7 +37,10 @@ function TasksListComponent(): JSX.Element {
     setId(task.id);
   };
 
-  const submitUpdate = (e: any, task: StateInterface) => {
+  const submitUpdate = (
+    e: React.FormEvent<HTMLFormElement>,
+    task: StateInterface
+  ) => {
     e.preventDefault();
     if (!description.trim()) {
       return alert('Preencha o campo da descrição.');
@@ -76,7 +80,7 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const handleClickCheck = (e: any) => {
+  const handleClickCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, checked } = e.target;
     setIsCheck([...isCheck, id]);
     if (!checked) {
@@ -111,9 +115,13 @@ function TasksListComponent(): JSX.Element {
     setIsCheck([]);
   };
 
+  const clearTasks = () => {
+    setIsCheck([]);
+  };
+
   return (
     <>
-      <FilterTaskComponent filterTask={filterTask} />
+      <FilterTaskComponent filterTask={filterTask} clearTasks={clearTasks} />
       <table>
         <thead>
           <tr>

@@ -12,7 +12,7 @@ function AddTaskComponent(): JSX.Element {
     inputRef.current?.focus();
   });
 
-  const submitAddTask = (e: any) => {
+  const submitAddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!description.trim()) {
       return alert('Preencha o campo da descrição.');
