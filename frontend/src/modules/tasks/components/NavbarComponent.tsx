@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
 
-function NavbarComponent(): JSX.Element {
+function NavbarComponent() {
   const { tasks, dispatch } = useContext(TaskContext);
 
   const handleClick = () => {
