@@ -9,7 +9,7 @@ const taskReducer = (state: StateInterface[], action: ActionInterface): any => {
     case ActionEnum.CHECK_TASK: {
       if (action.task) {
         const taskIndex = state.findIndex(
-          (t: StateInterface) => t.id === action.task?.id
+          (task: StateInterface) => task.id === action.task?.id
         );
         state[taskIndex].completed = action.task.completed;
       }

@@ -8,7 +8,7 @@ interface IProps {
 }
 
 function FilterTaskComponent(props: IProps): JSX.Element {
-  const { dispatch } = useContext(TaskContext);
+  const { tasks, dispatch } = useContext(TaskContext);
 
   const handleClickRemoveAllTasks = () => {
     dispatch?.({
@@ -30,9 +30,11 @@ function FilterTaskComponent(props: IProps): JSX.Element {
         Finalizados
       </span>
       <div>
-        <button onClick={handleClickRemoveAllTasks}>
-          Remover todas as tarefas
-        </button>
+        {tasks.length > 0 ? (
+          <button onClick={handleClickRemoveAllTasks}>
+            Remover todas as tarefas
+          </button>
+        ) : null}
       </div>
     </>
   );

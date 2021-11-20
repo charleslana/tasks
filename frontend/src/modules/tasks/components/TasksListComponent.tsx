@@ -11,12 +11,15 @@ function TasksListComponent(): JSX.Element {
   const [tasks, setTasks] = useState(sortedTasks);
   const [id, setId] = useState(0);
   const [description, setDescription] = useState('');
+  const [isCheckAll, setIsCheckAll] = useState(false);
+  const initialIsCheck: string[] = [];
+  const [isCheck, setIsCheck] = useState(initialIsCheck);
 
   useEffect(() => {
     setTasks(sortedTasks);
   }, [sortedTasks]);
 
-  const handleClickChecked = (task: StateInterface) => {
+  const handleFinish = (task: StateInterface) => {
     dispatch?.({
       type: ActionEnum.CHECK_TASK,
       task: {
@@ -25,6 +28,7 @@ function TasksListComponent(): JSX.Element {
         completed: !task.completed,
       },
     });
+    setIsCheck(isCheck.filter(item => item !== task.id.toString()));
   };
 
   const showEdit = (task: StateInterface) => {
@@ -62,6 +66,7 @@ function TasksListComponent(): JSX.Element {
       type: ActionEnum.REMOVE_TASK,
       id: id,
     });
+    setIsCheck(isCheck.filter(item => item !== id.toString()));
   };
 
   const filterTask = (type: FilterTaskEnum) => {
@@ -69,6 +74,41 @@ function TasksListComponent(): JSX.Element {
       const filteredTask = FilterTaskReducer(sortedTasks, type);
       setTasks(filteredTask);
     }
+  };
+
+  const handleClickCheck = (e: any) => {
+    const { id, checked } = e.target;
+    setIsCheck([...isCheck, id]);
+    if (!checked) {
+      setIsCheck(isCheck.filter(item => item !== id));
+    }
+  };
+
+  const handleClickSelectAll = () => {
+    const isCompleted = sortedTasks?.filter(task => !task.completed);
+    if (isCompleted) {
+      if (isCompleted.length > 0) {
+        setIsCheckAll(!isCheckAll);
+        const stateTasks = tasks
+          ?.filter(task => !task.completed)
+          .map(task => task.id.toString());
+        if (stateTasks) {
+          setIsCheck(stateTasks);
+        }
+      }
+    }
+  };
+
+  const handleFinishAll = () => {
+    isCheck.forEach(id => {
+      if (tasks) {
+        const taskIndex = tasks.findIndex(
+          (task: StateInterface) => task.id === parseInt(id)
+        );
+        handleFinish(tasks[taskIndex]);
+      }
+    });
+    setIsCheck([]);
   };
 
   return (
@@ -87,7 +127,14 @@ function TasksListComponent(): JSX.Element {
           {tasks?.map((task: StateInterface) => (
             <tr key={task.id}>
               <td>
-                <input type='checkbox' />
+                {!task.completed ? (
+                  <input
+                    type='checkbox'
+                    id={task.id.toString()}
+                    onChange={handleClickCheck}
+                    checked={isCheck.includes(task.id.toString())}
+                  />
+                ) : null}
               </td>
               <td>
                 {id === task.id ? (
@@ -113,7 +160,7 @@ function TasksListComponent(): JSX.Element {
                 {!task.completed ? (
                   <>
                     <button onClick={() => showEdit(task)}>Editar</button>
-                    <button onClick={() => handleClickChecked(task)}>
+                    <button onClick={() => handleFinish(task)}>
                       Finalizar
                     </button>
                   </>
@@ -128,6 +175,19 @@ function TasksListComponent(): JSX.Element {
           ))}
         </tbody>
       </table>
+      {tasks && tasks.length > 0 ? (
+        tasks.filter(task => !task.completed).length !== isCheck.length &&
+        tasks.filter(task => !task.completed).length ? (
+          <button onClick={handleClickSelectAll}>Selecionar todas</button>
+        ) : (
+          tasks.filter(task => !task.completed).length === 0 || (
+            <button onClick={() => setIsCheck([])}>Desmarcar todas</button>
+          )
+        )
+      ) : null}
+      {tasks?.length === 0 || isCheck.length === 0 ? null : (
+        <button onClick={handleFinishAll}>Finalizar selecionadas</button>
+      )}
     </>
   );
 }
