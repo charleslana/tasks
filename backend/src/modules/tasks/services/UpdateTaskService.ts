@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import AppError from '../../../shared/errors/AppError';
 import TaskStatusEnum from '../enumerations/TaskStatusEnum';
-import StatusInterface from '../interfaces/StatusInterface';
+import StatusTaskInterface from '../interfaces/StatusTaskInterface';
 import UpdateTaskInterface from '../interfaces/UpdateTaskInterface';
 import Task from '../typeorm/entities/Task';
 import { TaskRepository } from '../typeorm/repositories/TaskRepository';
@@ -39,7 +39,7 @@ class UpdateTaskService {
     return task;
   }
 
-  public async finished({ id }: StatusInterface): Promise<Task> {
+  public async finished({ id }: StatusTaskInterface): Promise<Task> {
     const taskRepository = getCustomRepository(TaskRepository);
     let task = await taskRepository.findOne(id);
     task = this.checkNotFound(task);
