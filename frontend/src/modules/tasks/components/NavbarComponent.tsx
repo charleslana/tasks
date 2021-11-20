@@ -1,25 +1,12 @@
 import React, { useContext } from 'react';
-import ActionEnum from '../../../shared/enumerations/ActionEnum';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
 
-function NavbarComponent() {
-  const { tasks, dispatch } = useContext(TaskContext);
-
-  const handleClick = () => {
-    dispatch?.({
-      type: ActionEnum.ADD_TASK,
-      task: {
-        id: 1,
-        description: 'Hello Dev',
-        isChecked: false,
-      },
-    });
-  };
+function NavbarComponent(): JSX.Element {
+  const { tasks } = useContext(TaskContext);
 
   return (
     <div>
-      <p>Task list size: {tasks.length}</p>
-      <button onClick={handleClick}>Add</button>
+      <h1>Minha lista de tarefas, total de: {tasks.length}</h1>
     </div>
   );
 }

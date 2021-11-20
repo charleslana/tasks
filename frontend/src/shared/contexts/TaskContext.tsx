@@ -12,8 +12,9 @@ const TaskContextProvider = (props: PropsInterface): any => {
   const initialState: StateInterface[] = [];
   const [tasks, dispatch] = useReducer(taskReducer, initialState);
 
-  const sortedTasks = tasks.sort((t: any, f: any) =>
-    f.isChecked === t.isChecked ? 0 : f.isChecked ? -1 : 1
+  const sortedTasks: StateInterface[] = tasks.sort(
+    (t: StateInterface, f: StateInterface) =>
+      f.completed === t.completed ? 0 : f.completed ? -1 : 1
   );
 
   return (

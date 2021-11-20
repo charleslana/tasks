@@ -3,9 +3,9 @@ import ActionEnum from '../enumerations/ActionEnum';
 export default interface ActionInterface {
   id?: number;
   type: ActionEnum;
-  task: {
+  task?: {
     id: number;
     description: string;
-    isChecked: boolean;
+    completed: boolean;
   };
 }

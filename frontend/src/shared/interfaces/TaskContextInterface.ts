@@ -4,6 +4,7 @@ import StateInterface from './StateInterface';
 
 export default interface TaskContextInterface {
   tasks: StateInterface[];
-  sortedTasks?: any;
+  sortedTasks?: StateInterface[];
   dispatch?: Dispatch<ActionInterface>;
+  finishedTasks?: StateInterface[];
 }
