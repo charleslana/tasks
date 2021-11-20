@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { TaskContext } from '../../../shared/contexts/TaskContext';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
+import { TaskContext } from '../../../shared/contexts/TaskContext';
 
 function NavbarComponent() {
   const { tasks, dispatch } = useContext(TaskContext);
