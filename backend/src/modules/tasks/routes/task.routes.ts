@@ -47,13 +47,13 @@ taskRoutes.put(
 );
 
 taskRoutes.put(
-  '/finished/:id',
+  '/status/:id',
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.number().required(),
     },
   }),
-  taskController.finished
+  taskController.status
 );
 
 taskRoutes.delete(

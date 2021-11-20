@@ -22,13 +22,10 @@ export default class TaskController {
     return response.status(204).json([]);
   }
 
-  public async finished(
-    request: Request,
-    response: Response
-  ): Promise<Response> {
+  public async status(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
     const updateTaskService = new UpdateTaskService();
-    const task = await updateTaskService.finished({
+    const task = await updateTaskService.finish({
       id: parseInt(id),
     });
     return response.json(task);
