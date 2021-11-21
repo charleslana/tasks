@@ -1,12 +1,19 @@
 import Api from '../../../shared/config/Api';
 import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 
-const listTaskService = async (): Promise<StateTaskInterface[]> => {
-  let tasks: StateTaskInterface[] = [];
-
-  await Api.get('/')
+const createTaskService = async (
+  description: string
+): Promise<StateTaskInterface> => {
+  let task: StateTaskInterface = {
+    id: 0,
+    description: description,
+    completed: false,
+  };
+  await Api.post('/', {
+    description: description,
+  })
     .then(response => {
-      tasks = response.data;
+      task = response.data;
     })
     .catch(error => {
       if (error.response !== undefined) {
@@ -15,7 +22,7 @@ const listTaskService = async (): Promise<StateTaskInterface[]> => {
         throw new Error(error.message);
       }
     });
-  return tasks;
+  return task;
 };
 
-export default listTaskService;
+export default createTaskService;

@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
 import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
+import addTasksRequest from '../services/CreateTaskService';
 import getTasksRequest from '../services/ListTaskService';
 
 function AddTaskComponent(): JSX.Element {
   const { dispatch, tasks } = useContext(TaskContext);
   const [description, setDescription] = useState('');
-  const [count, setCount] = useState(100);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -38,6 +38,9 @@ function AddTaskComponent(): JSX.Element {
   };
 
   const dispatchAddAllTask = (res: StateTaskInterface[]) => {
+    dispatch?.({
+      type: ActionEnum.REMOVE_ALL_TASK,
+    });
     res.forEach(element => {
       dispatch?.({
         type: ActionEnum.ADD_TASK,
@@ -50,25 +53,34 @@ function AddTaskComponent(): JSX.Element {
     });
   };
 
-  const dispatchAddTask = () => {
+  const dispatchAddTask = (task: StateTaskInterface) => {
     dispatch?.({
       type: ActionEnum.ADD_TASK,
       task: {
-        id: count,
-        description: description.trim(),
-        completed: false,
+        id: task.id,
+        description: task.description,
+        completed: task.completed,
       },
     });
   };
 
-  const submitAddTask = (e: React.FormEvent<HTMLFormElement>) => {
+  const requestAddTask = async (description: string) => {
+    await addTasksRequest(description)
+      .then(res => {
+        dispatchAddTask(res);
+      })
+      .catch(err => {
+        throw new Error(err.message);
+      });
+  };
+
+  const submitAddTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       checkIsNotEmpty(description);
       checkExist();
-      dispatchAddTask();
+      await requestAddTask(description);
       setDescription('');
-      setCount(count + 1);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
