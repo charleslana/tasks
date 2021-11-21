@@ -1,7 +1,6 @@
 import AppError from '../../../shared/errors/AppError';
 import StatusTaskInterface from '../interfaces/StatusTaskInterface';
 import Task from '../typeorm/entities/Task';
-import TaskCompletedEnum from '../enumerations/TaskCompletedEnum';
 import { TaskRepository } from '../typeorm/repositories/TaskRepository';
 import UpdateTaskInterface from '../interfaces/UpdateTaskInterface';
 import { getCustomRepository } from 'typeorm';
@@ -15,7 +14,7 @@ class UpdateTaskService {
   }
 
   private checkStatus(task: Task | undefined) {
-    if (task?.completed === TaskCompletedEnum.YES) {
+    if (task?.completed) {
       throw new AppError(
         'Não é possível atualizar uma tarefa que já se encontra finalizada.'
       );
@@ -44,7 +43,7 @@ class UpdateTaskService {
     let task = await taskRepository.findOne(id);
     task = this.checkNotFound(task);
     this.checkStatus(task);
-    task.completed = TaskCompletedEnum.YES;
+    task.completed = true;
     await taskRepository.save(task);
     return task;
   }

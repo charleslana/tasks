@@ -5,21 +5,19 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import TaskCompletedEnum from '../../enumerations/TaskCompletedEnum';
 
 @Entity('tasks')
 class Task {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    length: 255,
+  })
   description: string;
 
-  @Column({
-    type: 'enum',
-    enum: TaskCompletedEnum,
-  })
-  completed: TaskCompletedEnum;
+  @Column()
+  completed: boolean;
 
   @CreateDateColumn()
   created_at: Date;

@@ -1,16 +1,25 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
+import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
+import getTasksRequest from '../services/ListTaskService';
 
 function AddTaskComponent(): JSX.Element {
   const { dispatch, tasks } = useContext(TaskContext);
   const [description, setDescription] = useState('');
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(100);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    getTasksRequest()
+      .then(res => {
+        dispatchAddAllTask(res);
+      })
+      .catch(err => {
+        alert(err.message);
+      });
     inputRef.current?.focus();
-  });
+  }, [getTasksRequest]);
 
   const checkExist = () => {
     const existTask = tasks.some(
@@ -26,6 +35,19 @@ function AddTaskComponent(): JSX.Element {
     if (!value.trim()) {
       throw new Error('Preencha o campo da descrição.');
     }
+  };
+
+  const dispatchAddAllTask = (res: StateTaskInterface[]) => {
+    res.forEach(element => {
+      dispatch?.({
+        type: ActionEnum.ADD_TASK,
+        task: {
+          id: element.id,
+          description: element.description,
+          completed: element.completed,
+        },
+      });
+    });
   };
 
   const dispatchAddTask = () => {
