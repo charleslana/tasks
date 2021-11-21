@@ -1,11 +1,11 @@
 import Api from '../../../shared/config/Api';
-import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
 
 const createTaskService = async (
   description: string
 ): Promise<StateTaskInterface> => {
   let task = initialTask(description);
-  await Api.post('/', {
+  await Api.post('/task', {
     description: description,
   })
     .then(response => {

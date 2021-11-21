@@ -1,6 +1,6 @@
 import './App.css';
 import Routes from './shared/routes/';
-import TaskContextProvider from './shared/contexts/TaskContext';
+import TaskContextProvider from './modules/tasks/contexts/TaskContext';
 
 function App(): JSX.Element {
   return (

@@ -3,12 +3,12 @@ import updateTaskRequest, {
   arrayCompletedTaskService,
   completedTaskService,
 } from '../services/UpdateTaskService';
-import ActionEnum from '../../../shared/enumerations/ActionEnum';
+import ActionEnum from '../enumerations/ActionEnum';
 import FilterTaskComponent from './FilterTaskComponent';
-import FilterTaskEnum from '../../../shared/enumerations/FilterTaskEnum';
-import FilterTaskReducer from '../../../shared/reducers/FilterTaskReducer';
-import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
-import { TaskContext } from '../../../shared/contexts/TaskContext';
+import FilterTaskEnum from '../enumerations/FilterTaskEnum';
+import FilterTaskReducer from '../reducers/FilterTaskReducer';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
+import { TaskContext } from '../contexts/TaskContext';
 import deleteTaskService from '../services/DeleteTaskService';
 
 function TasksListComponent(): JSX.Element {

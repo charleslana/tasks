@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import ActionEnum from '../../../shared/enumerations/ActionEnum';
-import FilterTaskEnum from '../../../shared/enumerations/FilterTaskEnum';
-import { TaskContext } from '../../../shared/contexts/TaskContext';
+import ActionEnum from '../enumerations/ActionEnum';
+import FilterTaskEnum from '../enumerations/FilterTaskEnum';
+import { TaskContext } from '../contexts/TaskContext';
 import { clearTaskService } from '../services/DeleteTaskService';
 
 interface IProps {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import ActionEnum from '../../../shared/enumerations/ActionEnum';
-import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
-import { TaskContext } from '../../../shared/contexts/TaskContext';
+import ActionEnum from '../enumerations/ActionEnum';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
+import { TaskContext } from '../contexts/TaskContext';
 import addTaskRequest from '../services/CreateTaskService';
 import getTasksRequest from '../services/ListTaskService';
 
