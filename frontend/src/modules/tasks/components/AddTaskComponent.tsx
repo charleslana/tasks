@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
 import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
-import addTasksRequest from '../services/CreateTaskService';
+import addTaskRequest from '../services/CreateTaskService';
 import getTasksRequest from '../services/ListTaskService';
 
 function AddTaskComponent(): JSX.Element {
@@ -65,7 +65,7 @@ function AddTaskComponent(): JSX.Element {
   };
 
   const requestAddTask = async (description: string) => {
-    await addTasksRequest(description)
+    await addTaskRequest(description)
       .then(res => {
         dispatchAddTask(res);
       })
@@ -92,9 +92,9 @@ function AddTaskComponent(): JSX.Element {
     <>
       <h1>Minha lista de tarefas</h1>
       <div>Tarefas total: {tasks.length}</div>
-      <div>Tarefas ativas: {tasks.filter(task => task.completed).length}</div>
+      <div>Tarefas ativas: {tasks.filter(task => !task.completed).length}</div>
       <div>
-        Tarefas finalizadas: {tasks.filter(task => !task.completed).length}
+        Tarefas finalizadas: {tasks.filter(task => task.completed).length}
       </div>
       <form onSubmit={submitAddTask}>
         <input

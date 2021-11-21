@@ -47,7 +47,7 @@ taskRoutes.put(
 );
 
 taskRoutes.put(
-  '/status/:id',
+  '/completed/:id',
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.number().required(),

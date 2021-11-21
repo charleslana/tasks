@@ -1,4 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
+import updateTaskRequest, {
+  completedTaskService,
+} from '../services/UpdateTaskService';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
 import FilterTaskComponent from './FilterTaskComponent';
 import FilterTaskEnum from '../../../shared/enumerations/FilterTaskEnum';
@@ -40,6 +43,17 @@ function TasksListComponent(): JSX.Element {
     setIsCheck([]);
   };
 
+  const dispatchCompletedTask = (task: StateTaskInterface) => {
+    dispatch?.({
+      type: ActionEnum.CHECK_TASK,
+      task: {
+        id: task.id,
+        description: task.description,
+        completed: task.completed,
+      },
+    });
+  };
+
   const dispatchUpdateTask = (task: StateTaskInterface) => {
     dispatch?.({
       type: ActionEnum.UPDATE_TASK,
@@ -67,17 +81,16 @@ function TasksListComponent(): JSX.Element {
     setIsCheck(isCheck.filter(item => item !== id.toString()));
   };
 
-  const handleFinish = (task: StateTaskInterface) => {
-    dispatch?.({
-      type: ActionEnum.CHECK_TASK,
-      task: {
-        id: task.id,
-        description: task.description,
-        completed: !task.completed,
-      },
-    });
-    setIsCheck(isCheck.filter(item => item !== task.id.toString()));
-    setId(0);
+  const handleFinish = async (task: StateTaskInterface) => {
+    try {
+      await requestCompletedTask(task);
+      setIsCheck(isCheck.filter(item => item !== task.id.toString()));
+      setId(0);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
   };
 
   const handleFinishAll = () => {
@@ -114,12 +127,33 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
+  const requestCompletedTask = async (task: StateTaskInterface) => {
+    await completedTaskService(task)
+      .then(res => {
+        dispatchCompletedTask(res);
+      })
+      .catch(err => {
+        throw new Error(err.message);
+      });
+  };
+
+  const requestUpdateTask = async (task: StateTaskInterface) => {
+    task.description = description;
+    await updateTaskRequest(task)
+      .then(res => {
+        dispatchUpdateTask(res);
+      })
+      .catch(err => {
+        throw new Error(err.message);
+      });
+  };
+
   const showEdit = (task: StateTaskInterface) => {
     setDescription(task.description);
     setId(task.id);
   };
 
-  const submitUpdate = (
+  const submitUpdate = async (
     e: React.FormEvent<HTMLFormElement>,
     task: StateTaskInterface
   ) => {
@@ -127,7 +161,7 @@ function TasksListComponent(): JSX.Element {
     try {
       checkIsNotEmpty(description);
       checkExist(task);
-      dispatchUpdateTask(task);
+      await requestUpdateTask(task);
       setId(0);
       setDescription('');
     } catch (error) {
