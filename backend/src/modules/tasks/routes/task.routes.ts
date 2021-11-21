@@ -53,7 +53,7 @@ taskRoutes.put(
       id: Joi.number().required(),
     },
   }),
-  taskController.status
+  taskController.completed
 );
 
 taskRoutes.delete(
@@ -65,5 +65,7 @@ taskRoutes.delete(
   }),
   taskController.delete
 );
+
+taskRoutes.delete('/', taskController.clear);
 
 export default taskRoutes;

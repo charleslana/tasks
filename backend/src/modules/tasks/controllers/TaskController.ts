@@ -6,6 +6,24 @@ import ShowTaskService from '../services/ShowTaskService';
 import UpdateTaskService from '../services/UpdateTaskService';
 
 export default class TaskController {
+  public async clear(request: Request, response: Response): Promise<Response> {
+    const deleteTaskService = new DeleteTaskService();
+    await deleteTaskService.clear();
+    return response.status(204).json([]);
+  }
+
+  public async completed(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const { id } = request.params;
+    const updateTaskService = new UpdateTaskService();
+    const task = await updateTaskService.completed({
+      id: parseInt(id),
+    });
+    return response.json(task);
+  }
+
   public async create(request: Request, response: Response): Promise<Response> {
     const { description } = request.body;
     const createTaskService = new CreateTaskService();
@@ -20,15 +38,6 @@ export default class TaskController {
       id: parseInt(id),
     });
     return response.status(204).json([]);
-  }
-
-  public async status(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
-    const updateTaskService = new UpdateTaskService();
-    const task = await updateTaskService.finish({
-      id: parseInt(id),
-    });
-    return response.json(task);
   }
 
   public async index(request: Request, response: Response): Promise<Response> {

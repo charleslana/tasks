@@ -38,7 +38,7 @@ class UpdateTaskService {
     return task;
   }
 
-  public async finish({ id }: StatusTaskInterface): Promise<Task> {
+  public async completed({ id }: StatusTaskInterface): Promise<Task> {
     const taskRepository = getCustomRepository(TaskRepository);
     let task = await taskRepository.findOne(id);
     task = this.checkNotFound(task);

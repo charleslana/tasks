@@ -4,6 +4,15 @@ import { TaskRepository } from '../typeorm/repositories/TaskRepository';
 import { getCustomRepository } from 'typeorm';
 
 class DeleteTaskService {
+  public async clear(): Promise<void> {
+    const taskRepository = getCustomRepository(TaskRepository);
+    const task = await taskRepository.count();
+    if (!task) {
+      throw new AppError('Nenhuma tarefa foi encontrada.');
+    }
+    await taskRepository.clear();
+  }
+
   public async execute({ id }: DeleteTaskInterface): Promise<void> {
     const taskRepository = getCustomRepository(TaskRepository);
     const task = await taskRepository.findOne(id);
