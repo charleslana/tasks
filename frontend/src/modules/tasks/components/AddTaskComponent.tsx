@@ -55,16 +55,24 @@ function AddTaskComponent(): JSX.Element {
   };
 
   return (
-    <form onSubmit={submitAddTask}>
-      <input
-        ref={inputRef}
-        value={description}
-        onChange={e => {
-          setDescription(e.target.value);
-        }}
-      />
-      <button>Adicionar</button>
-    </form>
+    <>
+      <h1>Minha lista de tarefas</h1>
+      <div>Tarefas total: {tasks.length}</div>
+      <div>Tarefas ativas: {tasks.filter(task => task.completed).length}</div>
+      <div>
+        Tarefas finalizadas: {tasks.filter(task => !task.completed).length}
+      </div>
+      <form onSubmit={submitAddTask}>
+        <input
+          ref={inputRef}
+          value={description}
+          onChange={e => {
+            setDescription(e.target.value);
+          }}
+        />
+        <button>Adicionar</button>
+      </form>
+    </>
   );
 }
 

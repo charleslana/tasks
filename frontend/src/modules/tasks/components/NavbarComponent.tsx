@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
-import { TaskContext } from '../../../shared/contexts/TaskContext';
+import { Link } from 'react-router-dom';
+import React from 'react';
 
 function NavbarComponent(): JSX.Element {
-  const { tasks } = useContext(TaskContext);
-
   return (
-    <div>
-      <h1>Minha lista de tarefas, total de: {tasks.length}</h1>
-    </div>
+    <>
+      <div>
+        <Link to='/'>Home</Link> | <Link to='/about'>Sobre</Link> |{' '}
+        <Link to='/error'>Inexistente</Link>
+      </div>
+      <br />
+    </>
   );
 }
 
