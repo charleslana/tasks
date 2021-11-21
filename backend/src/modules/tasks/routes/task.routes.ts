@@ -30,7 +30,7 @@ taskRoutes.post(
   taskController.create
 );
 
-taskRoutes.post(
+taskRoutes.put(
   '/completed',
   celebrate(
     {

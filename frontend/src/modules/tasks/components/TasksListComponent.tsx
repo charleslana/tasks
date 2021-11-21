@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import updateTaskRequest, {
+  arrayCompletedTaskService,
   completedTaskService,
 } from '../services/UpdateTaskService';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
@@ -42,6 +43,15 @@ function TasksListComponent(): JSX.Element {
 
   const clearTasks = () => {
     setIsCheck([]);
+  };
+
+  const dispatchArrayCompletedTask = (tasks: StateTaskInterface[]) => {
+    isCheck.forEach(id => {
+      const taskIndex = tasks.findIndex(
+        (task: StateTaskInterface) => task.id === parseInt(id)
+      );
+      dispatchCompletedTask(tasks[taskIndex]);
+    });
   };
 
   const dispatchCompletedTask = (task: StateTaskInterface) => {
@@ -104,16 +114,15 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const handleFinishAll = () => {
-    isCheck.forEach(id => {
-      if (tasks) {
-        const taskIndex = tasks.findIndex(
-          (task: StateTaskInterface) => task.id === parseInt(id)
-        );
-        handleFinish(tasks[taskIndex]);
+  const handleFinishAll = async () => {
+    try {
+      await requestArrayCompletedTask(isCheck.map(i => Number(i)));
+      setIsCheck([]);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
       }
-    });
-    setIsCheck([]);
+    }
   };
 
   const handleClickSelectAll = () => {
@@ -136,6 +145,16 @@ function TasksListComponent(): JSX.Element {
       const filteredTask = FilterTaskReducer(sortedTasks, type);
       setTasks(filteredTask);
     }
+  };
+
+  const requestArrayCompletedTask = async (ids: number[]) => {
+    await arrayCompletedTaskService(ids)
+      .then(res => {
+        dispatchArrayCompletedTask(res);
+      })
+      .catch(err => {
+        throw new Error(err.message);
+      });
   };
 
   const requestCompletedTask = async (task: StateTaskInterface) => {
