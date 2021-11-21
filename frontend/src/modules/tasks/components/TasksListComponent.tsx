@@ -8,6 +8,7 @@ import FilterTaskEnum from '../../../shared/enumerations/FilterTaskEnum';
 import FilterTaskReducer from '../../../shared/reducers/FilterTaskReducer';
 import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
+import deleteTaskService from '../services/DeleteTaskService';
 
 function TasksListComponent(): JSX.Element {
   const { sortedTasks, dispatch } = useContext(TaskContext);
@@ -54,6 +55,13 @@ function TasksListComponent(): JSX.Element {
     });
   };
 
+  const dispatchDeleteTask = (id: number) => {
+    dispatch?.({
+      type: ActionEnum.REMOVE_TASK,
+      id: id,
+    });
+  };
+
   const dispatchUpdateTask = (task: StateTaskInterface) => {
     dispatch?.({
       type: ActionEnum.UPDATE_TASK,
@@ -73,12 +81,15 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const handleClickDelete = (id: number) => {
-    dispatch?.({
-      type: ActionEnum.REMOVE_TASK,
-      id: id,
-    });
-    setIsCheck(isCheck.filter(item => item !== id.toString()));
+  const handleClickDelete = async (id: number) => {
+    try {
+      await requestDeleteTask(id);
+      setIsCheck(isCheck.filter(item => item !== id.toString()));
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
   };
 
   const handleFinish = async (task: StateTaskInterface) => {
@@ -131,6 +142,16 @@ function TasksListComponent(): JSX.Element {
     await completedTaskService(task)
       .then(res => {
         dispatchCompletedTask(res);
+      })
+      .catch(err => {
+        throw new Error(err.message);
+      });
+  };
+
+  const requestDeleteTask = async (id: number) => {
+    await deleteTaskService(id)
+      .then(() => {
+        dispatchDeleteTask(id);
       })
       .catch(err => {
         throw new Error(err.message);

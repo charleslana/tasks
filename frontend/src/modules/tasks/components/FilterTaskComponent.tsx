@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import ActionEnum from '../../../shared/enumerations/ActionEnum';
 import FilterTaskEnum from '../../../shared/enumerations/FilterTaskEnum';
 import { TaskContext } from '../../../shared/contexts/TaskContext';
+import { clearTaskService } from '../services/DeleteTaskService';
 
 interface IProps {
   filterTask: (filter: FilterTaskEnum) => void;
@@ -11,11 +12,31 @@ interface IProps {
 function FilterTaskComponent(props: IProps): JSX.Element {
   const { tasks, dispatch } = useContext(TaskContext);
 
-  const handleClickRemoveAllTasks = () => {
+  const dispatchClearTask = () => {
     dispatch?.({
       type: ActionEnum.REMOVE_ALL_TASK,
     });
-    props.clearTasks();
+  };
+
+  const handleClickRemoveAllTasks = async () => {
+    try {
+      await requestClearTasks();
+      props.clearTasks();
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
+  };
+
+  const requestClearTasks = async () => {
+    await clearTaskService()
+      .then(() => {
+        dispatchClearTask();
+      })
+      .catch(err => {
+        throw new Error(err.message);
+      });
   };
 
   return (

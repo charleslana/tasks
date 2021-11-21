@@ -3,7 +3,6 @@ import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 
 const listTaskService = async (): Promise<StateTaskInterface[]> => {
   let tasks: StateTaskInterface[] = [];
-
   await Api.get('/')
     .then(response => {
       tasks = response.data;

@@ -4,11 +4,7 @@ import StateTaskInterface from '../../../shared/interfaces/StateTaskInterface';
 const createTaskService = async (
   description: string
 ): Promise<StateTaskInterface> => {
-  let task: StateTaskInterface = {
-    id: 0,
-    description: description,
-    completed: false,
-  };
+  let task = initialTask(description);
   await Api.post('/', {
     description: description,
   })
@@ -22,6 +18,15 @@ const createTaskService = async (
       return Promise.reject(error);
     });
   return task;
+};
+
+const initialTask = (description: string): StateTaskInterface => {
+  const init = {
+    id: 0,
+    description: description,
+    completed: false,
+  };
+  return init;
 };
 
 export default createTaskService;
