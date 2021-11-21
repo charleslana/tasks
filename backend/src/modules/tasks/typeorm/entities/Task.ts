@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import TaskStatusEnum from '../../enumerations/TaskStatusEnum';
+import TaskCompletedEnum from '../../enumerations/TaskCompletedEnum';
 
 @Entity('tasks')
 class Task {
@@ -17,9 +17,9 @@ class Task {
 
   @Column({
     type: 'enum',
-    enum: TaskStatusEnum,
+    enum: TaskCompletedEnum,
   })
-  status: TaskStatusEnum;
+  completed: TaskCompletedEnum;
 
   @CreateDateColumn()
   created_at: Date;

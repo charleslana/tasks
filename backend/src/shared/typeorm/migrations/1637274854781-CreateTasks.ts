@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import TaskStatusEnum from '../../../modules/tasks/enumerations/TaskStatusEnum';
+import TaskCompletedEnum from '../../../modules/tasks/enumerations/TaskCompletedEnum';
 
 export class CreateTasks1637274854781 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -19,10 +19,10 @@ export class CreateTasks1637274854781 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'status',
+            name: 'completed',
             type: 'enum',
-            enum: [TaskStatusEnum.NO, TaskStatusEnum.YES],
-            default: `'${TaskStatusEnum.NO}'`,
+            enum: [TaskCompletedEnum.NO, TaskCompletedEnum.YES],
+            default: `'${TaskCompletedEnum.NO}'`,
           },
           {
             name: 'created_at',

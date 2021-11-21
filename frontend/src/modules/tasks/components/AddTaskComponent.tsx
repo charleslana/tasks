@@ -18,7 +18,7 @@ function AddTaskComponent(): JSX.Element {
         task.description.toLowerCase() === description.toLowerCase().trim()
     );
     if (existTask) {
-      throw new Error('Já existe uma tarefa com a mesma descrição adicionada.');
+      throw new Error('Já existe uma tarefa com a mesma descrição.');
     }
   };
 

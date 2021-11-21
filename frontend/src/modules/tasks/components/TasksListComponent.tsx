@@ -26,7 +26,7 @@ function TasksListComponent(): JSX.Element {
         item.id !== task.id
     );
     if (existTask) {
-      throw new Error('Já existe uma tarefa com a mesma descrição adicionada.');
+      throw new Error('Já existe uma tarefa com a mesma descrição.');
     }
   };
 
