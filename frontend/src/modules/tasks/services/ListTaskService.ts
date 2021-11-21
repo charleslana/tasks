@@ -11,9 +11,8 @@ const listTaskService = async (): Promise<StateTaskInterface[]> => {
     .catch(error => {
       if (error.response !== undefined) {
         return Promise.reject(error.response.data);
-      } else {
-        throw new Error(error.message);
       }
+      return Promise.reject(error);
     });
   return tasks;
 };
