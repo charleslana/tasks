@@ -30,6 +30,22 @@ taskRoutes.post(
   taskController.create
 );
 
+taskRoutes.post(
+  '/completed',
+  celebrate(
+    {
+      [Segments.BODY]: {
+        idsCompleted: Joi.array()
+          .items(Joi.number().required())
+          .unique((a, b) => a === b)
+          .required(),
+      },
+    },
+    { abortEarly: false }
+  ),
+  taskController.arrayCompleted
+);
+
 taskRoutes.put(
   '/:id',
   celebrate(

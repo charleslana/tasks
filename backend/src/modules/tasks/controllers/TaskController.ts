@@ -6,6 +6,18 @@ import ShowTaskService from '../services/ShowTaskService';
 import UpdateTaskService from '../services/UpdateTaskService';
 
 export default class TaskController {
+  public async arrayCompleted(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const { idsCompleted } = request.body;
+    const updateTaskService = new UpdateTaskService();
+    const tasks = await updateTaskService.arrayCompleted({
+      ids: idsCompleted,
+    });
+    return response.json(tasks);
+  }
+
   public async clear(request: Request, response: Response): Promise<Response> {
     const deleteTaskService = new DeleteTaskService();
     await deleteTaskService.clear();
