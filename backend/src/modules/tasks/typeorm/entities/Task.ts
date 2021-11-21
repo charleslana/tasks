@@ -16,7 +16,9 @@ class Task {
   })
   description: string;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   completed: boolean;
 
   @CreateDateColumn()
