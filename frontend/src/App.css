@@ -1,0 +1,7 @@
+.p-column-header-content {
+  justify-content: center;
+}
+
+.p-datatable-tbody > tr > td {
+  text-align: center !important;
+}

@@ -1,12 +1,19 @@
+import { Checkbox, CheckboxChangeParams } from 'primereact/checkbox';
 import React, { useContext, useEffect, useState } from 'react';
 import updateTaskRequest, {
   arrayCompletedTaskService,
   completedTaskService,
 } from '../services/UpdateTaskService';
 import ActionEnum from '../enumerations/ActionEnum';
+import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import FilterTaskComponent from './FilterTaskComponent';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import FilterTaskReducer from '../reducers/FilterTaskReducer';
+import { InputText } from 'primereact/inputtext';
+import { ScrollTop } from 'primereact/scrolltop';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { TaskContext } from '../contexts/TaskContext';
 import deleteTaskService from '../services/DeleteTaskService';
@@ -83,7 +90,7 @@ function TasksListComponent(): JSX.Element {
     });
   };
 
-  const handleClickCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleClickCheck = (e: CheckboxChangeParams) => {
     const { id, checked } = e.target;
     setIsCheck([...isCheck, id]);
     if (!checked) {
@@ -211,82 +218,157 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
+  const statusBodyTemplate = (rowData: StateTaskInterface) => {
+    return (
+      <>
+        {rowData.completed ? (
+          <Badge value='Finalizado' severity='success'></Badge>
+        ) : (
+          <Badge value='Ativo' severity='info'></Badge>
+        )}
+      </>
+    );
+  };
+
+  const actionsBodyTemplate = (rowData: StateTaskInterface) => {
+    return (
+      <>
+        {!rowData.completed ? (
+          <>
+            <Button
+              icon='pi pi-pencil'
+              className='p-button-info m-2'
+              label='Editar'
+              onClick={() => showEdit(rowData)}
+            />
+            <Button
+              icon='pi pi-check'
+              className='p-button-success m-2'
+              label='Finalizar'
+              onClick={() => handleFinish(rowData)}
+            />
+          </>
+        ) : null}
+        {id !== rowData.id ? (
+          <Button
+            icon='pi pi-times'
+            className='p-button-danger m-2'
+            label='Excluir'
+            onClick={() => handleClickDelete(rowData.id)}
+          />
+        ) : null}
+      </>
+    );
+  };
+
+  const checkboxBodyTemplate = (rowData: StateTaskInterface) => {
+    return (
+      <>
+        {!rowData.completed ? (
+          <Checkbox
+            id={rowData.id.toString()}
+            onChange={handleClickCheck}
+            checked={isCheck.includes(rowData.id.toString())}
+          ></Checkbox>
+        ) : null}
+      </>
+    );
+  };
+
+  const descriptionBodyTemplate = (rowData: StateTaskInterface) => {
+    return (
+      <>
+        {id === rowData.id ? (
+          <>
+            <form onSubmit={e => submitUpdate(e, rowData)}>
+              <div className='formgroup-inline'>
+                <div className='field'>
+                  <label>Descrição</label>
+                  <InputText
+                    autoFocus
+                    value={description}
+                    onChange={e => {
+                      setDescription(e.target.value);
+                    }}
+                  />
+                </div>
+                <Button
+                  icon='pi pi-pencil'
+                  className='p-button-info'
+                  label='Atualizar'
+                />
+              </div>
+            </form>
+            <Button
+              icon='pi pi-angle-left'
+              className='p-button-secondary'
+              label='Cancelar'
+              onClick={() => setId(0)}
+            />
+          </>
+        ) : (
+          rowData.description
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       <FilterTaskComponent filterTask={filterTask} clearTasks={clearTasks} />
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Tarefa</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks?.map((task: StateTaskInterface) => (
-            <tr key={task.id}>
-              <td>
-                {!task.completed ? (
-                  <input
-                    type='checkbox'
-                    id={task.id.toString()}
-                    onChange={handleClickCheck}
-                    checked={isCheck.includes(task.id.toString())}
-                  />
-                ) : null}
-              </td>
-              <td>
-                {id === task.id ? (
-                  <>
-                    <form onSubmit={e => submitUpdate(e, task)}>
-                      <input
-                        autoFocus
-                        value={description}
-                        onChange={e => {
-                          setDescription(e.target.value);
-                        }}
-                      />
-                      <button>Atualizar</button>
-                    </form>
-                    <button onClick={() => setId(0)}>Cancelar</button>
-                  </>
-                ) : (
-                  task.description
-                )}
-              </td>
-              <td>{task.completed ? 'Finalizado' : 'Ativo'}</td>
-              <td>
-                {!task.completed ? (
-                  <>
-                    <button onClick={() => showEdit(task)}>Editar</button>
-                    <button onClick={() => handleFinish(task)}>
-                      Finalizar
-                    </button>
-                  </>
-                ) : null}
-                {id !== task.id ? (
-                  <button onClick={() => handleClickDelete(task.id)}>
-                    Excluir
-                  </button>
-                ) : null}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className='card'>
+        <DataTable
+          className='fadeinleft animation-duration-500'
+          value={tasks}
+          responsiveLayout='scroll'
+          emptyMessage='Nenhuma tarefa foi encontrada.'
+          paginator
+          rows={10}
+        >
+          <Column header='' body={checkboxBodyTemplate}></Column>
+          <Column
+            field='description'
+            header='Tarefas'
+            body={descriptionBodyTemplate}
+            sortable
+          ></Column>
+          <Column
+            field='completed'
+            header='Status'
+            body={statusBodyTemplate}
+            sortable
+          ></Column>
+          <Column header='Ações' body={actionsBodyTemplate}></Column>
+        </DataTable>
+        <ScrollTop />
+      </div>
       {tasks && tasks.length > 0 ? (
         tasks.filter(task => !task.completed).length !== isCheck.length &&
         tasks.filter(task => !task.completed).length ? (
-          <button onClick={handleClickSelectAll}>Selecionar todas</button>
+          <Button
+            icon='pi pi-list'
+            className='p-button-warning m-2 fadein animation-duration-500'
+            label='Selecionar todas'
+            onClick={handleClickSelectAll}
+          />
         ) : (
           tasks.filter(task => !task.completed).length === 0 || (
-            <button onClick={() => setIsCheck([])}>Desmarcar todas</button>
+            <Button
+              icon='pi pi-list'
+              className='m-2 fadein animation-duration-500'
+              label='Desmarcar todas'
+              onClick={() => setIsCheck([])}
+            />
           )
         )
       ) : null}
       {tasks?.length === 0 || isCheck.length === 0 ? null : (
-        <button onClick={handleFinishAll}>Finalizar selecionadas</button>
+        <Button
+          icon='pi pi-check'
+          className='p-button-success m-2 fadein animation-duration-500'
+          label='Finalizar selecionadas'
+          onClick={handleFinishAll}
+        />
       )}
     </>
   );

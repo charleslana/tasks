@@ -1,16 +1,26 @@
-import { Link } from 'react-router-dom';
+import { Menubar } from 'primereact/menubar';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function NavbarComponent(): JSX.Element {
-  return (
-    <>
-      <div>
-        <Link to='/'>Home</Link> | <Link to='/about'>Sobre</Link> |{' '}
-        <Link to='/error'>Inexistente</Link>
-      </div>
-      <br />
-    </>
-  );
+  const navigate = useNavigate();
+  const menuItems = [
+    {
+      label: 'Tarefas',
+      command: () => navigate('/'),
+    },
+    {
+      label: 'Sobre',
+      command: () => navigate('/about'),
+    },
+    {
+      label: 'Inexistente',
+      command: () => navigate('/error'),
+    },
+  ];
+  const start = <div className='text-3xl p-mr-2'>Minha lista de tarefas</div>;
+
+  return <Menubar model={menuItems} start={start} className='mb-3' />;
 }
 
 export default NavbarComponent;

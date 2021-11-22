@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ActionEnum from '../enumerations/ActionEnum';
+import { Button } from 'primereact/button';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
+import { TabMenu } from 'primereact/tabmenu';
 import { TaskContext } from '../contexts/TaskContext';
 import { clearTaskService } from '../services/DeleteTaskService';
 
@@ -11,6 +13,7 @@ interface IProps {
 
 function FilterTaskComponent(props: IProps): JSX.Element {
   const { tasks, dispatch } = useContext(TaskContext);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const dispatchClearTask = () => {
     dispatch?.({
@@ -39,25 +42,41 @@ function FilterTaskComponent(props: IProps): JSX.Element {
       });
   };
 
+  const tabItems = [
+    {
+      label: 'Todos',
+      command: () => props.filterTask(FilterTaskEnum.SHOW_ALL),
+    },
+    {
+      label: 'Ativos',
+      command: () => props.filterTask(FilterTaskEnum.SHOW_ACTIVE),
+    },
+    {
+      label: 'Finalizados',
+      command: () => props.filterTask(FilterTaskEnum.SHOW_COMPLETED),
+    },
+  ];
+
   return (
     <>
-      <span onClick={() => props.filterTask(FilterTaskEnum.SHOW_ALL)}>
-        Todos
-      </span>
-      |
-      <span onClick={() => props.filterTask(FilterTaskEnum.SHOW_ACTIVE)}>
-        Ativos
-      </span>
-      |
-      <span onClick={() => props.filterTask(FilterTaskEnum.SHOW_COMPLETED)}>
-        Finalizados
-      </span>
-      <div>
-        {tasks.length > 0 ? (
-          <button onClick={handleClickRemoveAllTasks}>
-            Remover todas as tarefas
-          </button>
-        ) : null}
+      <div className='grid justify-content-center mb-2'>
+        <div className='col-12 md:col-6 lg:col-6'>
+          <TabMenu
+            model={tabItems}
+            activeIndex={activeIndex}
+            onTabChange={e => setActiveIndex(e.index)}
+          />
+        </div>
+        <div className='col-12 md:col-6 lg:col-6'>
+          {tasks.length > 0 ? (
+            <Button
+              icon='pi pi-times'
+              className='p-button-danger'
+              label='Remover todas as tarefas'
+              onClick={handleClickRemoveAllTasks}
+            />
+          ) : null}
+        </div>
       </div>
     </>
   );
