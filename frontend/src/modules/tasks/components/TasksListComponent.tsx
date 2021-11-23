@@ -237,7 +237,7 @@ function TasksListComponent(): JSX.Element {
       checkIsNotEmpty(description);
       checkExist(task);
       await requestUpdateTask(task);
-      setIsShowDialog(false);
+      cancelUpdate();
       setDescription('');
     } catch (error) {
       if (error instanceof Error) {
@@ -310,7 +310,7 @@ function TasksListComponent(): JSX.Element {
       <Dialog
         header={task?.description}
         visible={isShowDialog}
-        onHide={() => setIsShowDialog(false)}
+        onHide={() => cancelUpdate()}
         breakpoints={{ '960px': '75vw' }}
         style={{ width: '50vw' }}
         footer={
