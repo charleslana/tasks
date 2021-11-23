@@ -212,12 +212,6 @@ function TasksListComponent(): JSX.Element {
       .finally(() => hideLoading());
   };
 
-  const showEdit = (task: StateTaskInterface) => {
-    setDescription(task.description);
-    setTask(task);
-    setIsShowDialog(true);
-  };
-
   const showConfirmDialog = (onClick: () => void) => {
     confirmDialog({
       message: 'Tem certeza de que deseja continuar?',
@@ -226,6 +220,12 @@ function TasksListComponent(): JSX.Element {
       acceptLabel: 'Sim',
       rejectLabel: 'Não',
     });
+  };
+
+  const showEdit = (task: StateTaskInterface) => {
+    setDescription(task.description);
+    setTask(task);
+    setIsShowDialog(true);
   };
 
   const submitUpdate = async (
