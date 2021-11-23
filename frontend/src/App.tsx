@@ -1,12 +1,15 @@
 import './App.css';
+import LoaderContextProvider from './shared/contexts/LoaderContext';
 import Routes from './shared/routes/';
 import TaskContextProvider from './modules/tasks/contexts/TaskContext';
 
 function App(): JSX.Element {
   return (
-    <TaskContextProvider>
-      <Routes />
-    </TaskContextProvider>
+    <LoaderContextProvider>
+      <TaskContextProvider>
+        <Routes />
+      </TaskContextProvider>
+    </LoaderContextProvider>
   );
 }
 

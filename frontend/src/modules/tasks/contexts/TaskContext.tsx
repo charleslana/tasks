@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from 'react';
-import PropsContextInterface from '../interfaces/PropsContextInterface';
+import PropsContextInterface from '../../../shared/interfaces/PropsContextInterface';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import TaskContextInterface from '../interfaces/TaskContextInterface';
 import taskReducer from '../reducers/TaskReducer';

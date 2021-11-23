@@ -1,26 +1,34 @@
 import React, { useContext, useEffect, useState } from 'react';
-import ActionEnum from '../enumerations/ActionEnum';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { TaskContext } from '../contexts/TaskContext';
+import TaskEnum from '../enumerations/TaskEnum';
 import addTaskRequest from '../services/CreateTaskService';
 import getTasksRequest from '../services/ListTaskService';
+import { loaderService } from '../../../shared/services/LoaderService';
 
 function AddTaskComponent(): JSX.Element {
   const { dispatch, tasks } = useContext(TaskContext);
+  const { showLoading, hideLoading } = loaderService();
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    getTasksRequest()
+    getAllTasks();
+  }, [getTasksRequest]);
+
+  const getAllTasks = async () => {
+    showLoading();
+    await getTasksRequest()
       .then(res => {
         dispatchAddAllTask(res);
       })
       .catch(err => {
         alert(err.message);
-      });
-  }, [getTasksRequest]);
+      })
+      .finally(() => hideLoading());
+  };
 
   const checkExist = () => {
     const existTask = tasks.some(
@@ -40,11 +48,11 @@ function AddTaskComponent(): JSX.Element {
 
   const dispatchAddAllTask = (res: StateTaskInterface[]) => {
     dispatch?.({
-      type: ActionEnum.REMOVE_ALL_TASK,
+      type: TaskEnum.REMOVE_ALL_TASK,
     });
     res.forEach(element => {
       dispatch?.({
-        type: ActionEnum.ADD_TASK,
+        type: TaskEnum.ADD_TASK,
         task: {
           id: element.id,
           description: element.description,
@@ -56,7 +64,7 @@ function AddTaskComponent(): JSX.Element {
 
   const dispatchAddTask = (task: StateTaskInterface) => {
     dispatch?.({
-      type: ActionEnum.ADD_TASK,
+      type: TaskEnum.ADD_TASK,
       task: {
         id: task.id,
         description: task.description,
@@ -66,13 +74,15 @@ function AddTaskComponent(): JSX.Element {
   };
 
   const requestAddTask = async (description: string) => {
+    showLoading();
     await addTaskRequest(description)
       .then(res => {
         dispatchAddTask(res);
       })
       .catch(err => {
         throw new Error(err.message);
-      });
+      })
+      .finally(() => hideLoading());
   };
 
   const submitAddTask = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,7 +131,6 @@ function AddTaskComponent(): JSX.Element {
               <div className='field'>
                 <label>Descrição</label>
                 <InputText
-                  autoFocus
                   value={description}
                   onChange={e => {
                     setDescription(e.target.value);

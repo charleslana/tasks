@@ -4,7 +4,6 @@ import updateTaskRequest, {
   arrayCompletedTaskService,
   completedTaskService,
 } from '../services/UpdateTaskService';
-import ActionEnum from '../enumerations/ActionEnum';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
@@ -16,6 +15,7 @@ import { InputText } from 'primereact/inputtext';
 import { ScrollTop } from 'primereact/scrolltop';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { TaskContext } from '../contexts/TaskContext';
+import TaskEnum from '../enumerations/TaskEnum';
 import deleteTaskService from '../services/DeleteTaskService';
 
 function TasksListComponent(): JSX.Element {
@@ -63,7 +63,7 @@ function TasksListComponent(): JSX.Element {
 
   const dispatchCompletedTask = (task: StateTaskInterface) => {
     dispatch?.({
-      type: ActionEnum.CHECK_TASK,
+      type: TaskEnum.CHECK_TASK,
       task: {
         id: task.id,
         description: task.description,
@@ -74,14 +74,14 @@ function TasksListComponent(): JSX.Element {
 
   const dispatchDeleteTask = (id: number) => {
     dispatch?.({
-      type: ActionEnum.REMOVE_TASK,
+      type: TaskEnum.REMOVE_TASK,
       id: id,
     });
   };
 
   const dispatchUpdateTask = (task: StateTaskInterface) => {
     dispatch?.({
-      type: ActionEnum.UPDATE_TASK,
+      type: TaskEnum.UPDATE_TASK,
       task: {
         id: task.id,
         description: description,

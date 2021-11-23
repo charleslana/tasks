@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import ActionEnum from '../enumerations/ActionEnum';
 import { Button } from 'primereact/button';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import { TabMenu } from 'primereact/tabmenu';
 import { TaskContext } from '../contexts/TaskContext';
+import TaskEnum from '../enumerations/TaskEnum';
 import { clearTaskService } from '../services/DeleteTaskService';
 
 interface IProps {
@@ -17,7 +17,7 @@ function FilterTaskComponent(props: IProps): JSX.Element {
 
   const dispatchClearTask = () => {
     dispatch?.({
-      type: ActionEnum.REMOVE_ALL_TASK,
+      type: TaskEnum.REMOVE_ALL_TASK,
     });
   };
 
