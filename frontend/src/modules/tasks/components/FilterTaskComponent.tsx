@@ -1,11 +1,12 @@
-import React, { useContext, useState } from 'react';
-import { Button } from 'primereact/button';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
+import React, { useContext, useState } from 'react';
+import TaskEnum from '../enumerations/TaskEnum';
+import { Button } from 'primereact/button';
+import { clearTaskService } from '../services/DeleteTaskService';
+import { confirmDialog } from 'primereact/confirmdialog';
+import { loaderService } from '../../../shared/services/LoaderService';
 import { TabMenu } from 'primereact/tabmenu';
 import { TaskContext } from '../contexts/TaskContext';
-import TaskEnum from '../enumerations/TaskEnum';
-import { clearTaskService } from '../services/DeleteTaskService';
-import { loaderService } from '../../../shared/services/LoaderService';
 
 interface IProps {
   filterTask: (filter: FilterTaskEnum) => void;
@@ -16,6 +17,16 @@ function FilterTaskComponent(props: IProps): JSX.Element {
   const { tasks, dispatch } = useContext(TaskContext);
   const { showLoading, hideLoading } = loaderService();
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const showConfirmDialog = (onClick: () => void) => {
+    confirmDialog({
+      message: 'Tem certeza de que deseja continuar?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: onClick,
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+    });
+  };
 
   const dispatchClearTask = () => {
     dispatch?.({
@@ -77,7 +88,7 @@ function FilterTaskComponent(props: IProps): JSX.Element {
               icon='pi pi-times'
               className='p-button-danger'
               label='Remover todas as tarefas'
-              onClick={handleClickRemoveAllTasks}
+              onClick={() => showConfirmDialog(handleClickRemoveAllTasks)}
             />
           ) : null}
         </div>

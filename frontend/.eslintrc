@@ -12,8 +12,8 @@
   "rules": {
     "no-console": "warn",
     "spaced-comment": "warn",
-    "prettier/prettier": "error",
+    "prettier/prettier": "error"
     // "@typescript-eslint/no-explicit-any": "off",
-    "sort-imports": "warn"
+    // "sort-imports": "warn"
   }
 }

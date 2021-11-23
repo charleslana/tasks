@@ -1,37 +1,45 @@
-import { Checkbox, CheckboxChangeParams } from 'primereact/checkbox';
+import deleteTaskService from '../services/DeleteTaskService';
+import FilterTaskComponent from './FilterTaskComponent';
+import FilterTaskEnum from '../enumerations/FilterTaskEnum';
+import FilterTaskReducer from '../reducers/FilterTaskReducer';
 import React, { useContext, useEffect, useState } from 'react';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
+import TaskEnum from '../enumerations/TaskEnum';
+import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { Checkbox, CheckboxChangeParams } from 'primereact/checkbox';
+import { Column } from 'primereact/column';
+import { confirmDialog } from 'primereact/confirmdialog';
+import { DataTable } from 'primereact/datatable';
+import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { loaderService } from '../../../shared/services/LoaderService';
+import { ScrollTop } from 'primereact/scrolltop';
+import { TaskContext } from '../contexts/TaskContext';
 import updateTaskRequest, {
   arrayCompletedTaskService,
   completedTaskService,
 } from '../services/UpdateTaskService';
-import { Badge } from 'primereact/badge';
-import { Button } from 'primereact/button';
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import FilterTaskComponent from './FilterTaskComponent';
-import FilterTaskEnum from '../enumerations/FilterTaskEnum';
-import FilterTaskReducer from '../reducers/FilterTaskReducer';
-import { InputText } from 'primereact/inputtext';
-import { ScrollTop } from 'primereact/scrolltop';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
-import { TaskContext } from '../contexts/TaskContext';
-import TaskEnum from '../enumerations/TaskEnum';
-import deleteTaskService from '../services/DeleteTaskService';
-import { loaderService } from '../../../shared/services/LoaderService';
 
 function TasksListComponent(): JSX.Element {
   const { sortedTasks, dispatch } = useContext(TaskContext);
   const { showLoading, hideLoading } = loaderService();
   const [tasks, setTasks] = useState(sortedTasks);
-  const [id, setId] = useState(0);
   const [description, setDescription] = useState('');
   const [isCheckAll, setIsCheckAll] = useState(false);
   const initialIsCheck: string[] = [];
   const [isCheck, setIsCheck] = useState(initialIsCheck);
+  const [isShowDialog, setIsShowDialog] = useState(false);
+  const [task, setTask] = useState<StateTaskInterface | null>(null);
 
   useEffect(() => {
     setTasks(sortedTasks);
   }, [sortedTasks]);
+
+  const cancelUpdate = () => {
+    setIsShowDialog(false);
+    setTask(null);
+  };
 
   const checkExist = (task: StateTaskInterface) => {
     const existTask = tasks?.some(
@@ -115,7 +123,6 @@ function TasksListComponent(): JSX.Element {
     try {
       await requestCompletedTask(task);
       setIsCheck(isCheck.filter(item => item !== task.id.toString()));
-      setId(0);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -207,7 +214,18 @@ function TasksListComponent(): JSX.Element {
 
   const showEdit = (task: StateTaskInterface) => {
     setDescription(task.description);
-    setId(task.id);
+    setTask(task);
+    setIsShowDialog(true);
+  };
+
+  const showConfirmDialog = (onClick: () => void) => {
+    confirmDialog({
+      message: 'Tem certeza de que deseja continuar?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: onClick,
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+    });
   };
 
   const submitUpdate = async (
@@ -219,7 +237,7 @@ function TasksListComponent(): JSX.Element {
       checkIsNotEmpty(description);
       checkExist(task);
       await requestUpdateTask(task);
-      setId(0);
+      setIsShowDialog(false);
       setDescription('');
     } catch (error) {
       if (error instanceof Error) {
@@ -243,16 +261,18 @@ function TasksListComponent(): JSX.Element {
               icon='pi pi-check'
               className='p-button-success m-2'
               label='Finalizar'
-              onClick={() => handleFinish(rowData)}
+              onClick={() => showConfirmDialog(() => handleFinish(rowData))}
             />
           </>
         ) : null}
-        {id !== rowData.id ? (
+        {task?.id !== rowData.id ? (
           <Button
             icon='pi pi-times'
             className='p-button-danger m-2'
             label='Excluir'
-            onClick={() => handleClickDelete(rowData.id)}
+            onClick={() =>
+              showConfirmDialog(() => handleClickDelete(rowData.id))
+            }
           />
         ) : null}
       </>
@@ -273,44 +293,6 @@ function TasksListComponent(): JSX.Element {
     );
   };
 
-  const descriptionBodyTemplate = (rowData: StateTaskInterface) => {
-    return (
-      <>
-        {id === rowData.id ? (
-          <>
-            <form onSubmit={e => submitUpdate(e, rowData)}>
-              <div className='formgroup-inline'>
-                <div className='field'>
-                  <label>Descrição</label>
-                  <InputText
-                    autoFocus
-                    value={description}
-                    onChange={e => {
-                      setDescription(e.target.value);
-                    }}
-                  />
-                </div>
-                <Button
-                  icon='pi pi-pencil'
-                  className='p-button-info'
-                  label='Atualizar'
-                />
-              </div>
-            </form>
-            <Button
-              icon='pi pi-angle-left'
-              className='p-button-secondary'
-              label='Cancelar'
-              onClick={() => setId(0)}
-            />
-          </>
-        ) : (
-          rowData.description
-        )}
-      </>
-    );
-  };
-
   const statusBodyTemplate = (rowData: StateTaskInterface) => {
     return (
       <>
@@ -325,6 +307,43 @@ function TasksListComponent(): JSX.Element {
 
   return (
     <>
+      <Dialog
+        header={task?.description}
+        visible={isShowDialog}
+        onHide={() => setIsShowDialog(false)}
+        breakpoints={{ '960px': '75vw' }}
+        style={{ width: '50vw' }}
+        footer={
+          <Button
+            label='Cancelar'
+            icon='pi pi-times'
+            onClick={() => cancelUpdate()}
+            className='p-button-text'
+          />
+        }
+      >
+        {task ? (
+          <form onSubmit={e => submitUpdate(e, task)}>
+            <div className='formgroup-inline'>
+              <div className='field'>
+                <label>Descrição</label>
+                <InputText
+                  autoFocus
+                  value={description}
+                  onChange={e => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </div>
+              <Button
+                icon='pi pi-pencil'
+                className='p-button-info'
+                label='Atualizar'
+              />
+            </div>
+          </form>
+        ) : null}
+      </Dialog>
       <FilterTaskComponent filterTask={filterTask} clearTasks={clearTasks} />
       <div className='card'>
         <DataTable
@@ -336,12 +355,7 @@ function TasksListComponent(): JSX.Element {
           rows={10}
         >
           <Column header='' body={checkboxBodyTemplate}></Column>
-          <Column
-            field='description'
-            header='Tarefas'
-            body={descriptionBodyTemplate}
-            sortable
-          ></Column>
+          <Column field='description' header='Tarefas' sortable></Column>
           <Column
             field='completed'
             header='Status'
@@ -377,7 +391,7 @@ function TasksListComponent(): JSX.Element {
           icon='pi pi-check'
           className='p-button-success m-2 fadein animation-duration-500'
           label='Finalizar selecionadas'
-          onClick={handleFinishAll}
+          onClick={() => showConfirmDialog(handleFinishAll)}
         />
       )}
     </>
