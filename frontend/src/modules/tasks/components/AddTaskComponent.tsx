@@ -18,18 +18,6 @@ function AddTaskComponent(): JSX.Element {
     getAllTasks();
   }, [getTasksRequest]);
 
-  const getAllTasks = async () => {
-    showLoading();
-    await getTasksRequest()
-      .then(res => {
-        dispatchAddAllTask(res);
-      })
-      .catch(err => {
-        alert(err.message);
-      })
-      .finally(() => hideLoading());
-  };
-
   const checkExist = () => {
     const existTask = tasks.some(
       task =>
@@ -71,6 +59,18 @@ function AddTaskComponent(): JSX.Element {
         completed: task.completed,
       },
     });
+  };
+
+  const getAllTasks = async () => {
+    showLoading();
+    await getTasksRequest()
+      .then(res => {
+        dispatchAddAllTask(res);
+      })
+      .catch(err => {
+        alert(err.message);
+      })
+      .finally(() => hideLoading());
   };
 
   const requestAddTask = async (description: string) => {
