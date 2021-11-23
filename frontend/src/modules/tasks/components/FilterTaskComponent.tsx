@@ -5,6 +5,7 @@ import { TabMenu } from 'primereact/tabmenu';
 import { TaskContext } from '../contexts/TaskContext';
 import TaskEnum from '../enumerations/TaskEnum';
 import { clearTaskService } from '../services/DeleteTaskService';
+import { loaderService } from '../../../shared/services/LoaderService';
 
 interface IProps {
   filterTask: (filter: FilterTaskEnum) => void;
@@ -13,6 +14,7 @@ interface IProps {
 
 function FilterTaskComponent(props: IProps): JSX.Element {
   const { tasks, dispatch } = useContext(TaskContext);
+  const { showLoading, hideLoading } = loaderService();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const dispatchClearTask = () => {
@@ -33,13 +35,15 @@ function FilterTaskComponent(props: IProps): JSX.Element {
   };
 
   const requestClearTasks = async () => {
+    showLoading();
     await clearTaskService()
       .then(() => {
         dispatchClearTask();
       })
       .catch(err => {
         throw new Error(err.message);
-      });
+      })
+      .finally(() => hideLoading());
   };
 
   const tabItems = [

@@ -18,7 +18,9 @@ function NavbarComponent(): JSX.Element {
       command: () => navigate('/error'),
     },
   ];
-  const start = <div className='text-3xl p-mr-2'>Minha lista de tarefas</div>;
+  const start = (
+    <div className='text-3xl p-mr-2 mr-2'>Minha lista de tarefas</div>
+  );
 
   return <Menubar model={menuItems} start={start} className='mb-3' />;
 }

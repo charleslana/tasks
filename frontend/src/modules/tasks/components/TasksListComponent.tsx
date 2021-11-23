@@ -17,9 +17,11 @@ import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { TaskContext } from '../contexts/TaskContext';
 import TaskEnum from '../enumerations/TaskEnum';
 import deleteTaskService from '../services/DeleteTaskService';
+import { loaderService } from '../../../shared/services/LoaderService';
 
 function TasksListComponent(): JSX.Element {
   const { sortedTasks, dispatch } = useContext(TaskContext);
+  const { showLoading, hideLoading } = loaderService();
   const [tasks, setTasks] = useState(sortedTasks);
   const [id, setId] = useState(0);
   const [description, setDescription] = useState('');
@@ -155,44 +157,52 @@ function TasksListComponent(): JSX.Element {
   };
 
   const requestArrayCompletedTask = async (ids: number[]) => {
+    showLoading();
     await arrayCompletedTaskService(ids)
       .then(res => {
         dispatchArrayCompletedTask(res);
       })
       .catch(err => {
         throw new Error(err.message);
-      });
+      })
+      .finally(() => hideLoading());
   };
 
   const requestCompletedTask = async (task: StateTaskInterface) => {
+    showLoading();
     await completedTaskService(task)
       .then(res => {
         dispatchCompletedTask(res);
       })
       .catch(err => {
         throw new Error(err.message);
-      });
+      })
+      .finally(() => hideLoading());
   };
 
   const requestDeleteTask = async (id: number) => {
+    showLoading();
     await deleteTaskService(id)
       .then(() => {
         dispatchDeleteTask(id);
       })
       .catch(err => {
         throw new Error(err.message);
-      });
+      })
+      .finally(() => hideLoading());
   };
 
   const requestUpdateTask = async (task: StateTaskInterface) => {
     task.description = description;
+    showLoading();
     await updateTaskRequest(task)
       .then(res => {
         dispatchUpdateTask(res);
       })
       .catch(err => {
         throw new Error(err.message);
-      });
+      })
+      .finally(() => hideLoading());
   };
 
   const showEdit = (task: StateTaskInterface) => {
