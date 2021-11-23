@@ -218,18 +218,6 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const statusBodyTemplate = (rowData: StateTaskInterface) => {
-    return (
-      <>
-        {rowData.completed ? (
-          <Badge value='Finalizado' severity='success'></Badge>
-        ) : (
-          <Badge value='Ativo' severity='info'></Badge>
-        )}
-      </>
-    );
-  };
-
   const actionsBodyTemplate = (rowData: StateTaskInterface) => {
     return (
       <>
@@ -308,6 +296,18 @@ function TasksListComponent(): JSX.Element {
           </>
         ) : (
           rowData.description
+        )}
+      </>
+    );
+  };
+
+  const statusBodyTemplate = (rowData: StateTaskInterface) => {
+    return (
+      <>
+        {rowData.completed ? (
+          <Badge value='Finalizado' severity='success'></Badge>
+        ) : (
+          <Badge value='Ativo' severity='info'></Badge>
         )}
       </>
     );
