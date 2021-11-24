@@ -167,6 +167,7 @@ function AddTaskComponent(): JSX.Element {
                 </label>
                 <InputText
                   id='description'
+                  maxLength={255}
                   autoComplete='off'
                   value={formik.values.description}
                   onChange={formik.handleChange}

@@ -327,9 +327,11 @@ function TasksListComponent(): JSX.Element {
           <form onSubmit={e => submitUpdate(e, task)}>
             <div className='formgroup-inline'>
               <div className='field'>
-                <label>Descrição</label>
+                <label>Descrição *</label>
                 <InputText
                   autoFocus
+                  maxLength={255}
+                  autoComplete='off'
                   value={description}
                   onChange={e => {
                     setDescription(e.target.value);
