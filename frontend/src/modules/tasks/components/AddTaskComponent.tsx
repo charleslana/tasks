@@ -1,5 +1,5 @@
 import addTaskRequest from '../services/CreateTaskService';
-import FormTaskInterface from '../interfaces/FormTaskInterface';
+import FormAddTaskInterface from '../interfaces/FormAddTaskInterface';
 import getTasksRequest from '../services/ListTaskService';
 import React, { useContext, useEffect } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
@@ -19,7 +19,7 @@ function AddTaskComponent(): JSX.Element {
   const { showLoading, hideLoading } = loaderService();
   const { showToast } = toastService();
   const { showAlert } = alertService();
-  const initialValues: FormTaskInterface = { description: '' };
+  const initialValues: FormAddTaskInterface = { description: '' };
 
   useEffect(() => {
     getAllTasks();
@@ -67,8 +67,8 @@ function AddTaskComponent(): JSX.Element {
 
   const formik = useFormik({
     initialValues: initialValues,
-    validate: (data: FormTaskInterface) => {
-      const errors: FormikErrors<FormTaskInterface> = {};
+    validate: (data: FormAddTaskInterface) => {
+      const errors: FormikErrors<FormAddTaskInterface> = {};
       if (!data.description.trim()) {
         errors.description = 'O campo da descrição é obrigatório.';
       }

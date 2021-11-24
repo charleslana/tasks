@@ -2,6 +2,7 @@ import deleteTaskService from '../services/DeleteTaskService';
 import FilterTaskComponent from './FilterTaskComponent';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import FilterTaskReducer from '../reducers/FilterTaskReducer';
+import FormUpdateTaskInterface from '../interfaces/FormUpdateTaskInterface';
 import React, { useContext, useEffect, useState } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import TaskEnum from '../enumerations/TaskEnum';
@@ -9,10 +10,12 @@ import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Checkbox, CheckboxChangeParams } from 'primereact/checkbox';
+import { classNames } from 'primereact/utils';
 import { Column } from 'primereact/column';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
+import { FormikErrors, useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { ScrollTop } from 'primereact/scrolltop';
@@ -29,12 +32,12 @@ function TasksListComponent(): JSX.Element {
   const { showToast } = toastService();
   const { showAlert } = alertService();
   const [tasks, setTasks] = useState(sortedTasks);
-  const [description, setDescription] = useState('');
   const [isCheckAll, setIsCheckAll] = useState(false);
   const initialIsCheck: string[] = [];
   const [isCheck, setIsCheck] = useState(initialIsCheck);
   const [isShowDialog, setIsShowDialog] = useState(false);
   const [task, setTask] = useState<StateTaskInterface | null>(null);
+  const initialValues: FormUpdateTaskInterface = { editDescription: '' };
 
   useEffect(() => {
     setTasks(sortedTasks);
@@ -43,22 +46,18 @@ function TasksListComponent(): JSX.Element {
   const cancelUpdate = () => {
     setIsShowDialog(false);
     setTask(null);
+    formik.resetForm();
   };
 
   const checkExist = (task: StateTaskInterface) => {
     const existTask = tasks?.some(
       item =>
-        item.description.toLowerCase() === description.toLowerCase().trim() &&
+        item.description.toLowerCase() ===
+          formik.values.editDescription.toLowerCase().trim() &&
         item.id !== task.id
     );
     if (existTask) {
       throw new Error('Já existe uma tarefa com a mesma descrição.');
-    }
-  };
-
-  const checkIsNotEmpty = (value: string) => {
-    if (!value.trim()) {
-      throw new Error('Preencha o campo da descrição.');
     }
   };
 
@@ -100,10 +99,43 @@ function TasksListComponent(): JSX.Element {
       task: {
         created_at: task.created_at,
         completed: task.completed,
-        description: description,
+        description: formik.values.editDescription.trim(),
         id: task.id,
       },
     });
+  };
+
+  const filterTask = (type: FilterTaskEnum) => {
+    if (sortedTasks) {
+      const filteredTask = FilterTaskReducer(sortedTasks, type);
+      setTasks(filteredTask);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validate: (data: FormUpdateTaskInterface) => {
+      const errors: FormikErrors<FormUpdateTaskInterface> = {};
+      if (!data.editDescription.trim()) {
+        errors.editDescription = 'O campo da descrição é obrigatório.';
+      }
+      return errors;
+    },
+    onSubmit: () => {
+      if (task) {
+        submitUpdate(task);
+      }
+    },
+  });
+
+  const getFormErrorMessage = () => {
+    return (
+      isFormFieldValid() && (
+        <div className='text-right'>
+          <small className='p-error'>{formik.errors.editDescription}</small>
+        </div>
+      )
+    );
   };
 
   const handleClickCheck = (e: CheckboxChangeParams) => {
@@ -165,12 +197,8 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const filterTask = (type: FilterTaskEnum) => {
-    if (sortedTasks) {
-      const filteredTask = FilterTaskReducer(sortedTasks, type);
-      setTasks(filteredTask);
-    }
-  };
+  const isFormFieldValid = () =>
+    !!(formik.touched.editDescription && formik.errors.editDescription);
 
   const requestArrayCompletedTask = async (ids: number[]) => {
     showLoading();
@@ -209,7 +237,7 @@ function TasksListComponent(): JSX.Element {
   };
 
   const requestUpdateTask = async (task: StateTaskInterface) => {
-    task.description = description;
+    task.description = formik.values.editDescription.trim();
     showLoading();
     await updateTaskRequest(task)
       .then(res => {
@@ -232,22 +260,17 @@ function TasksListComponent(): JSX.Element {
   };
 
   const showEdit = (task: StateTaskInterface) => {
-    setDescription(task.description);
     setTask(task);
+    formik.values.editDescription = task.description;
     setIsShowDialog(true);
   };
 
-  const submitUpdate = async (
-    e: React.FormEvent<HTMLFormElement>,
-    task: StateTaskInterface
-  ) => {
-    e.preventDefault();
+  const submitUpdate = async (task: StateTaskInterface) => {
     try {
-      checkIsNotEmpty(description);
       checkExist(task);
       await requestUpdateTask(task);
       cancelUpdate();
-      setDescription('');
+      formik.resetForm();
       showToast('success', 'Tarefa atualizada com sucesso.');
     } catch (error) {
       if (error instanceof Error) {
@@ -334,20 +357,29 @@ function TasksListComponent(): JSX.Element {
         }
       >
         {task ? (
-          <form onSubmit={e => submitUpdate(e, task)}>
+          <form onSubmit={formik.handleSubmit}>
             <div className='formgroup-inline'>
               <div className='field'>
-                <label>Descrição *</label>
+                <label
+                  htmlFor='editDescription'
+                  className={classNames({
+                    'p-error': isFormFieldValid(),
+                  })}
+                >
+                  Descrição *
+                </label>
                 <InputText
                   id='editDescription'
                   autoFocus
                   maxLength={255}
                   autoComplete='off'
-                  value={description}
-                  onChange={e => {
-                    setDescription(e.target.value);
-                  }}
+                  value={formik.values.editDescription}
+                  onChange={formik.handleChange}
+                  className={classNames({
+                    'p-invalid': isFormFieldValid(),
+                  })}
                 />
+                {getFormErrorMessage()}
               </div>
               <Button
                 icon='pi pi-pencil'
