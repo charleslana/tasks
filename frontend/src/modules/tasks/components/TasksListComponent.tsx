@@ -75,9 +75,10 @@ function TasksListComponent(): JSX.Element {
     dispatch?.({
       type: TaskEnum.CHECK_TASK,
       task: {
-        id: task.id,
-        description: task.description,
+        created_at: task.created_at,
         completed: task.completed,
+        description: task.description,
+        id: task.id,
       },
     });
   };
@@ -93,9 +94,10 @@ function TasksListComponent(): JSX.Element {
     dispatch?.({
       type: TaskEnum.UPDATE_TASK,
       task: {
-        id: task.id,
-        description: description,
+        created_at: task.created_at,
         completed: task.completed,
+        description: description,
+        id: task.id,
       },
     });
   };
@@ -293,6 +295,10 @@ function TasksListComponent(): JSX.Element {
     );
   };
 
+  const dateBodyTemplate = (rowData: StateTaskInterface) => {
+    return new Date(rowData.created_at).toLocaleDateString();
+  };
+
   const statusBodyTemplate = (rowData: StateTaskInterface) => {
     return (
       <>
@@ -329,6 +335,7 @@ function TasksListComponent(): JSX.Element {
               <div className='field'>
                 <label>Descrição *</label>
                 <InputText
+                  id='editDescription'
                   autoFocus
                   maxLength={255}
                   autoComplete='off'
@@ -359,6 +366,12 @@ function TasksListComponent(): JSX.Element {
         >
           <Column header='' body={checkboxBodyTemplate}></Column>
           <Column field='description' header='Tarefas' sortable></Column>
+          <Column
+            field='created_at'
+            header='Data'
+            body={dateBodyTemplate}
+            sortable
+          ></Column>
           <Column
             field='completed'
             header='Status'

@@ -75,14 +75,14 @@ function FilterTaskComponent(props: IProps): JSX.Element {
   return (
     <>
       <div className='grid justify-content-center mb-2'>
-        <div className='col-12 md:col-6 lg:col-6'>
+        <div className='col-12 md:col-9 lg:col-9'>
           <TabMenu
             model={tabItems}
             activeIndex={activeIndex}
             onTabChange={e => setActiveIndex(e.index)}
           />
         </div>
-        <div className='col-12 md:col-6 lg:col-6'>
+        <div className='col-12 md:col-3 lg:col-3'>
           {tasks && tasks.length > 0 ? (
             <Button
               icon='pi pi-times'

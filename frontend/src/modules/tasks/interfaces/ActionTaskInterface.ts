@@ -3,9 +3,10 @@ import TaskEnum from '../enumerations/TaskEnum';
 export default interface ActionTaskInterface {
   id?: number;
   task?: {
-    id: number;
-    description: string;
+    created_at: Date;
     completed: boolean;
+    description: string;
+    id: number;
   };
   type: TaskEnum;
 }

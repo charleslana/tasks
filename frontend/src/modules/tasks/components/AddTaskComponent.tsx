@@ -1,4 +1,5 @@
 import addTaskRequest from '../services/CreateTaskService';
+import FormTaskInterface from '../interfaces/FormTaskInterface';
 import getTasksRequest from '../services/ListTaskService';
 import React, { useContext, useEffect } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
@@ -10,12 +11,11 @@ import { FormikErrors, useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { TaskContext } from '../contexts/TaskContext';
-import FormValuesInterface from '../interfaces/FormValuesInterface';
 
 function AddTaskComponent(): JSX.Element {
   const { dispatch, tasks } = useContext(TaskContext);
   const { showLoading, hideLoading } = loaderService();
-  const initialValues: FormValuesInterface = { description: '' };
+  const initialValues: FormTaskInterface = { description: '' };
 
   useEffect(() => {
     getAllTasks();
@@ -46,9 +46,10 @@ function AddTaskComponent(): JSX.Element {
       dispatch?.({
         type: TaskEnum.ADD_TASK,
         task: {
-          id: element.id,
-          description: element.description,
+          created_at: element.created_at,
           completed: element.completed,
+          description: element.description,
+          id: element.id,
         },
       });
     });
@@ -58,17 +59,18 @@ function AddTaskComponent(): JSX.Element {
     dispatch?.({
       type: TaskEnum.ADD_TASK,
       task: {
-        id: task.id,
-        description: task.description,
+        created_at: task.created_at,
         completed: task.completed,
+        description: task.description,
+        id: task.id,
       },
     });
   };
 
   const formik = useFormik({
     initialValues: initialValues,
-    validate: (data: FormValuesInterface) => {
-      const errors: FormikErrors<FormValuesInterface> = {};
+    validate: (data: FormTaskInterface) => {
+      const errors: FormikErrors<FormTaskInterface> = {};
       if (!data.description.trim()) {
         errors.description = 'O campo da descrição é obrigatório.';
       }
