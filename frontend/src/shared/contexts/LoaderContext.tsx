@@ -1,8 +1,8 @@
-import React, { createContext, useReducer } from 'react';
 import LoaderContextInterface from '../interfaces/LoaderContextInterface';
-import PropsContextInterface from '../interfaces/PropsContextInterface';
-import StateLoaderInterface from '../interfaces/StateLoaderInterface';
 import loaderReducer from '../reducers/LoaderReducer';
+import PropsContextInterface from '../interfaces/PropsContextInterface';
+import React, { createContext, useReducer } from 'react';
+import StateLoaderInterface from '../interfaces/StateLoaderInterface';
 
 export const LoaderContext = createContext<LoaderContextInterface>({});
 

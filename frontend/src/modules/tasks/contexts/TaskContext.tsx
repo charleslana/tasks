@@ -1,12 +1,10 @@
-import React, { createContext, useReducer } from 'react';
 import PropsContextInterface from '../../../shared/interfaces/PropsContextInterface';
+import React, { createContext, useReducer } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import TaskContextInterface from '../interfaces/TaskContextInterface';
 import taskReducer from '../reducers/TaskReducer';
 
-export const TaskContext = createContext<TaskContextInterface>({
-  tasks: [],
-});
+export const TaskContext = createContext<TaskContextInterface>({});
 
 const TaskContextProvider = (props: PropsContextInterface): JSX.Element => {
   const initialState: StateTaskInterface[] = [];

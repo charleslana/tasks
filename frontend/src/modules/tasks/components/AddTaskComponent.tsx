@@ -22,7 +22,7 @@ function AddTaskComponent(): JSX.Element {
   }, [getTasksRequest]);
 
   const checkExist = () => {
-    const existTask = tasks.some(
+    const existTask = tasks?.some(
       task =>
         task.description.toLowerCase() ===
         formik.values.description.toLowerCase().trim()
@@ -132,14 +132,14 @@ function AddTaskComponent(): JSX.Element {
       <div className='grid justify-content-center mb-2'>
         <div className='col-12 md:col-6 lg:col-3'>
           <h4>
-            Tarefas totais <Badge value={tasks.length.toString()}></Badge>
+            Tarefas totais <Badge value={tasks?.length.toString()}></Badge>
           </h4>
         </div>
         <div className='col-12 md:col-6 lg:col-3'>
           <h4>
             Tarefas ativas{' '}
             <Badge
-              value={tasks.filter(task => !task.completed).length.toString()}
+              value={tasks?.filter(task => !task.completed).length.toString()}
             ></Badge>
           </h4>
         </div>
@@ -147,7 +147,7 @@ function AddTaskComponent(): JSX.Element {
           <h4>
             Tarefas finalizadas{' '}
             <Badge
-              value={tasks.filter(task => task.completed).length.toString()}
+              value={tasks?.filter(task => task.completed).length.toString()}
             ></Badge>
           </h4>
         </div>

@@ -1,5 +1,5 @@
-import { Menubar } from 'primereact/menubar';
 import React from 'react';
+import { Menubar } from 'primereact/menubar';
 import { useNavigate } from 'react-router-dom';
 
 function NavbarComponent(): JSX.Element {

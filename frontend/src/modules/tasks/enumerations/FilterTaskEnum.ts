@@ -1,6 +1,6 @@
 enum FilterTaskEnum {
-  SHOW_ALL,
   SHOW_ACTIVE,
+  SHOW_ALL,
   SHOW_COMPLETED,
 }
 

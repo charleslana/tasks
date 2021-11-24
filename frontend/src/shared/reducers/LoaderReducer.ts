@@ -7,13 +7,13 @@ const loaderReducer = (
   action: ActionLoaderInterface
 ): StateLoaderInterface => {
   switch (action.type) {
-    case LoaderEnum.SHOW_LOADER:
-      return {
-        loading: true,
-      };
     case LoaderEnum.HIDE_LOADER:
       return {
         loading: false,
+      };
+    case LoaderEnum.SHOW_LOADER:
+      return {
+        loading: true,
       };
     default:
       return state;

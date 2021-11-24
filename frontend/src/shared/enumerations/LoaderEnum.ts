@@ -1,6 +1,6 @@
 enum LoaderEnum {
-  SHOW_LOADER = 'show-loader',
   HIDE_LOADER = 'hide-loader',
+  SHOW_LOADER = 'show-loader',
 }
 
 export default LoaderEnum;

@@ -22,6 +22,8 @@ const taskReducer = (
       }
       return state.filter((task: StateTaskInterface) => task.id !== action.id);
     }
+    case TaskEnum.REMOVE_ALL_TASK:
+      return (state = []);
     case TaskEnum.REMOVE_TASK:
       return state.filter((task: StateTaskInterface) => task.id !== action.id);
     case TaskEnum.UPDATE_TASK:
@@ -30,8 +32,6 @@ const taskReducer = (
           ? { ...task, description: action.task?.description }
           : task
       );
-    case TaskEnum.REMOVE_ALL_TASK:
-      return (state = []);
     default:
       return state;
   }

@@ -1,9 +1,9 @@
 import AddTaskComponent from '../components/AddTaskComponent';
-import { BlockUI } from 'primereact/blockui';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import React from 'react';
 import TasksListComponent from '../components/TasksListComponent';
+import { BlockUI } from 'primereact/blockui';
 import { loaderService } from '../../../shared/services/LoaderService';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 function TaskPage(): JSX.Element {
   const { loading } = loaderService();

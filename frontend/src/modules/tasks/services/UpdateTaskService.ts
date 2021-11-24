@@ -20,12 +20,10 @@ export const arrayCompletedTaskService = async (
   return tasks;
 };
 
-const updateTaskService = async (
+export const completedTaskService = async (
   task: StateTaskInterface
 ): Promise<StateTaskInterface> => {
-  await Api.put(`/task/${task.id}`, {
-    description: task.description,
-  })
+  await Api.put(`/task/completed/${task.id}`)
     .then(response => {
       task = response.data;
     })
@@ -38,10 +36,12 @@ const updateTaskService = async (
   return task;
 };
 
-export const completedTaskService = async (
+const updateTaskService = async (
   task: StateTaskInterface
 ): Promise<StateTaskInterface> => {
-  await Api.put(`/task/completed/${task.id}`)
+  await Api.put(`/task/${task.id}`, {
+    description: task.description,
+  })
     .then(response => {
       task = response.data;
     })

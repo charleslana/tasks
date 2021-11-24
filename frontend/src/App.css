@@ -1,11 +1,3 @@
-.p-column-header-content {
-  justify-content: center;
-}
-
-.p-datatable-tbody > tr > td {
-  text-align: center !important;
-}
-
 .block-ui-spinner {
   position: absolute;
   top: 50vh;
@@ -15,4 +7,12 @@
 
 .dialog-size {
   width: 50vw;
+}
+
+.p-column-header-content {
+  justify-content: center;
+}
+
+.p-datatable-tbody > tr > td {
+  text-align: center !important;
 }

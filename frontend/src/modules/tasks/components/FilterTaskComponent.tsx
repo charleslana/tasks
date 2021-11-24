@@ -83,7 +83,7 @@ function FilterTaskComponent(props: IProps): JSX.Element {
           />
         </div>
         <div className='col-12 md:col-6 lg:col-6'>
-          {tasks.length > 0 ? (
+          {tasks && tasks.length > 0 ? (
             <Button
               icon='pi pi-times'
               className='p-button-danger'

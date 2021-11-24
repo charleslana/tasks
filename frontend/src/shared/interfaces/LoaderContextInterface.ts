@@ -1,8 +1,8 @@
 import ActionLoaderInterface from './ActionLoaderInterface';
-import { Dispatch } from 'react';
 import StateLoaderInterface from './StateLoaderInterface';
+import { Dispatch } from 'react';
 
 export default interface LoaderContextInterface {
-  state?: StateLoaderInterface;
   dispatch?: Dispatch<ActionLoaderInterface>;
+  state?: StateLoaderInterface;
 }

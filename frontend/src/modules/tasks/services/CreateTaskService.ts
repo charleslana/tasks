@@ -22,9 +22,9 @@ const createTaskService = async (
 
 const initialTask = (description: string): StateTaskInterface => {
   const init = {
-    id: 0,
-    description: description,
     completed: false,
+    description: description,
+    id: 0,
   };
   return init;
 };
