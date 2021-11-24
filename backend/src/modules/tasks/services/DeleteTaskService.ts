@@ -1,7 +1,7 @@
 import AppError from '../../../shared/errors/AppError';
 import DeleteTaskInterface from '../interfaces/DeleteTaskInterface';
-import { TaskRepository } from '../typeorm/repositories/TaskRepository';
 import { getCustomRepository } from 'typeorm';
+import { TaskRepository } from '../typeorm/repositories/TaskRepository';
 
 class DeleteTaskService {
   public async clear(): Promise<void> {

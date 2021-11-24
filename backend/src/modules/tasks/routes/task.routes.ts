@@ -1,9 +1,21 @@
-import { Joi, Segments, celebrate } from 'celebrate';
-import { Router } from 'express';
 import TaskController from '../controllers/TaskController';
+import { celebrate, Joi, Segments } from 'celebrate';
+import { Router } from 'express';
 
 const taskRoutes = Router();
 const taskController = new TaskController();
+
+taskRoutes.delete(
+  '/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.number().required(),
+    },
+  }),
+  taskController.delete
+);
+
+taskRoutes.delete('/', taskController.clear);
 
 taskRoutes.get('/', taskController.index);
 
@@ -71,17 +83,5 @@ taskRoutes.put(
   }),
   taskController.completed
 );
-
-taskRoutes.delete(
-  '/:id',
-  celebrate({
-    [Segments.PARAMS]: {
-      id: Joi.number().required(),
-    },
-  }),
-  taskController.delete
-);
-
-taskRoutes.delete('/', taskController.clear);
 
 export default taskRoutes;

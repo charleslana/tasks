@@ -1,11 +1,11 @@
+import AppError from '../../../shared/errors/AppError';
+import Task from '../typeorm/entities/Task';
+import UpdateTaskInterface from '../interfaces/UpdateTaskInterface';
+import { getCustomRepository } from 'typeorm';
+import { TaskRepository } from '../typeorm/repositories/TaskRepository';
 import CompletedTaskInterface, {
   ArrayCompletedTaskInterface,
 } from '../interfaces/CompletedTaskInterface';
-import AppError from '../../../shared/errors/AppError';
-import Task from '../typeorm/entities/Task';
-import { TaskRepository } from '../typeorm/repositories/TaskRepository';
-import UpdateTaskInterface from '../interfaces/UpdateTaskInterface';
-import { getCustomRepository } from 'typeorm';
 
 class UpdateTaskService {
   public async arrayCompleted({
@@ -40,6 +40,16 @@ class UpdateTaskService {
     }
   }
 
+  public async completed({ id }: CompletedTaskInterface): Promise<Task> {
+    const taskRepository = getCustomRepository(TaskRepository);
+    let task = await taskRepository.findOne(id);
+    task = this.checkNotFound(task);
+    this.checkStatus(task);
+    task.completed = true;
+    await taskRepository.save(task);
+    return task;
+  }
+
   public async execute({
     id,
     description,
@@ -53,16 +63,6 @@ class UpdateTaskService {
       throw new AppError('Já existe uma tarefa com a mesma descrição.');
     }
     task.description = description;
-    await taskRepository.save(task);
-    return task;
-  }
-
-  public async completed({ id }: CompletedTaskInterface): Promise<Task> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    let task = await taskRepository.findOne(id);
-    task = this.checkNotFound(task);
-    this.checkStatus(task);
-    task.completed = true;
     await taskRepository.save(task);
     return task;
   }

@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
 import CreateTaskService from '../services/CreateTaskService';
 import DeleteTaskService from '../services/DeleteTaskService';
 import ListTaskService from '../services/ListTaskService';
 import ShowTaskService from '../services/ShowTaskService';
 import UpdateTaskService from '../services/UpdateTaskService';
+import { Request, Response } from 'express';
 
 export default class TaskController {
   public async arrayCompleted(
