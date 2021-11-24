@@ -37,9 +37,6 @@ function AddTaskComponent(): JSX.Element {
   };
 
   const dispatchAddAllTask = (res: StateTaskInterface[]) => {
-    dispatch?.({
-      type: TaskEnum.REMOVE_ALL_TASK,
-    });
     res.forEach(element => {
       dispatch?.({
         type: TaskEnum.ADD_TASK,
@@ -78,6 +75,9 @@ function AddTaskComponent(): JSX.Element {
   });
 
   const getAllTasks = async () => {
+    dispatch?.({
+      type: TaskEnum.REMOVE_ALL_TASK,
+    });
     showLoading();
     await getTasksRequest()
       .then(res => {

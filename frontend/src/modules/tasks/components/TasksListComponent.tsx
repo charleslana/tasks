@@ -382,6 +382,7 @@ function TasksListComponent(): JSX.Element {
                 {getFormErrorMessage()}
               </div>
               <Button
+                type='submit'
                 icon='pi pi-pencil'
                 className='p-button-info mt-1'
                 label='Atualizar'
@@ -399,12 +400,14 @@ function TasksListComponent(): JSX.Element {
           emptyMessage='Nenhuma tarefa foi encontrada.'
           paginator
           rows={10}
+          sortField={'created_at'}
+          sortOrder={1}
         >
           <Column header='' body={checkboxBodyTemplate}></Column>
           <Column field='description' header='Tarefas' sortable></Column>
           <Column
             field='created_at'
-            header='Data'
+            header='Criado em'
             body={dateBodyTemplate}
             sortable
           ></Column>
