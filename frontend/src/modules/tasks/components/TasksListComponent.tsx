@@ -312,7 +312,8 @@ function TasksListComponent(): JSX.Element {
         visible={isShowDialog}
         onHide={() => cancelUpdate()}
         breakpoints={{ '960px': '75vw' }}
-        style={{ width: '50vw' }}
+        className='dialog-size'
+        draggable={false}
         footer={
           <Button
             label='Cancelar'

@@ -1,18 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Badge } from 'primereact/badge';
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
-import { TaskContext } from '../contexts/TaskContext';
-import TaskEnum from '../enumerations/TaskEnum';
 import addTaskRequest from '../services/CreateTaskService';
 import getTasksRequest from '../services/ListTaskService';
+import React, { useContext, useEffect } from 'react';
+import StateTaskInterface from '../interfaces/StateTaskInterface';
+import TaskEnum from '../enumerations/TaskEnum';
+import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { classNames } from 'primereact/utils';
+import { FormikErrors, useFormik } from 'formik';
+import { InputText } from 'primereact/inputtext';
 import { loaderService } from '../../../shared/services/LoaderService';
+import { TaskContext } from '../contexts/TaskContext';
+import FormValuesInterface from '../interfaces/FormValuesInterface';
 
 function AddTaskComponent(): JSX.Element {
   const { dispatch, tasks } = useContext(TaskContext);
   const { showLoading, hideLoading } = loaderService();
-  const [description, setDescription] = useState('');
+  const initialValues: FormValuesInterface = { description: '' };
 
   useEffect(() => {
     getAllTasks();
@@ -21,7 +24,8 @@ function AddTaskComponent(): JSX.Element {
   const checkExist = () => {
     const existTask = tasks.some(
       task =>
-        task.description.toLowerCase() === description.toLowerCase().trim()
+        task.description.toLowerCase() ===
+        formik.values.description.toLowerCase().trim()
     );
     if (existTask) {
       throw new Error('Já existe uma tarefa com a mesma descrição.');
@@ -61,6 +65,18 @@ function AddTaskComponent(): JSX.Element {
     });
   };
 
+  const formik = useFormik({
+    initialValues: initialValues,
+    validate: (data: FormValuesInterface) => {
+      const errors: FormikErrors<FormValuesInterface> = {};
+      if (!data.description.trim()) {
+        errors.description = 'O campo da descrição é obrigatório.';
+      }
+      return errors;
+    },
+    onSubmit: () => submitAddTask(),
+  });
+
   const getAllTasks = async () => {
     showLoading();
     await getTasksRequest()
@@ -72,6 +88,19 @@ function AddTaskComponent(): JSX.Element {
       })
       .finally(() => hideLoading());
   };
+
+  const getFormErrorMessage = () => {
+    return (
+      isFormFieldValid() && (
+        <div className='text-right'>
+          <small className='p-error'>{formik.errors.description}</small>
+        </div>
+      )
+    );
+  };
+
+  const isFormFieldValid = () =>
+    !!(formik.touched.description && formik.errors.description);
 
   const requestAddTask = async (description: string) => {
     showLoading();
@@ -85,13 +114,12 @@ function AddTaskComponent(): JSX.Element {
       .finally(() => hideLoading());
   };
 
-  const submitAddTask = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitAddTask = async () => {
     try {
-      checkIsNotEmpty(description);
+      checkIsNotEmpty(formik.values.description);
       checkExist();
-      await requestAddTask(description);
-      setDescription('');
+      await requestAddTask(formik.values.description);
+      formik.resetForm();
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -126,18 +154,30 @@ function AddTaskComponent(): JSX.Element {
       </div>
       <div className='grid justify-content-center mb-2'>
         <div className='col-12 md:col-9 lg:col-6'>
-          <form onSubmit={submitAddTask}>
+          <form onSubmit={formik.handleSubmit}>
             <div className='formgroup-inline'>
               <div className='field'>
-                <label>Descrição</label>
+                <label
+                  htmlFor='description'
+                  className={classNames({
+                    'p-error': isFormFieldValid(),
+                  })}
+                >
+                  Descrição *
+                </label>
                 <InputText
-                  value={description}
-                  onChange={e => {
-                    setDescription(e.target.value);
-                  }}
+                  id='description'
+                  autoComplete='off'
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  className={classNames({
+                    'p-invalid': isFormFieldValid(),
+                  })}
                 />
+                {getFormErrorMessage()}
               </div>
               <Button
+                type='submit'
                 icon='pi pi-plus'
                 className='p-button-success'
                 label='Cadastrar'
