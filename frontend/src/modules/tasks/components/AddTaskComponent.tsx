@@ -4,6 +4,7 @@ import getTasksRequest from '../services/ListTaskService';
 import React, { useContext, useEffect } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import TaskEnum from '../enumerations/TaskEnum';
+import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { classNames } from 'primereact/utils';
@@ -11,10 +12,13 @@ import { FormikErrors, useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { TaskContext } from '../contexts/TaskContext';
+import { toastService } from '../../../shared/services/ToastService';
 
 function AddTaskComponent(): JSX.Element {
   const { dispatch, tasks } = useContext(TaskContext);
   const { showLoading, hideLoading } = loaderService();
+  const { showToast } = toastService();
+  const { showAlert } = alertService();
   const initialValues: FormTaskInterface = { description: '' };
 
   useEffect(() => {
@@ -29,12 +33,6 @@ function AddTaskComponent(): JSX.Element {
     );
     if (existTask) {
       throw new Error('Já existe uma tarefa com a mesma descrição.');
-    }
-  };
-
-  const checkIsNotEmpty = (value: string) => {
-    if (!value.trim()) {
-      throw new Error('Preencha o campo da descrição.');
     }
   };
 
@@ -86,7 +84,7 @@ function AddTaskComponent(): JSX.Element {
         dispatchAddAllTask(res);
       })
       .catch(err => {
-        alert(err.message);
+        showAlert(err.message);
       })
       .finally(() => hideLoading());
   };
@@ -118,13 +116,13 @@ function AddTaskComponent(): JSX.Element {
 
   const submitAddTask = async () => {
     try {
-      checkIsNotEmpty(formik.values.description);
       checkExist();
       await requestAddTask(formik.values.description);
       formik.resetForm();
+      showToast('success', 'Tarefa criada com sucesso.');
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        showAlert(error.message);
       }
     }
   };
@@ -182,7 +180,7 @@ function AddTaskComponent(): JSX.Element {
               <Button
                 type='submit'
                 icon='pi pi-plus'
-                className='p-button-success'
+                className='p-button-success mt-1'
                 label='Cadastrar'
               />
             </div>

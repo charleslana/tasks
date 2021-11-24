@@ -5,6 +5,7 @@ import FilterTaskReducer from '../reducers/FilterTaskReducer';
 import React, { useContext, useEffect, useState } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import TaskEnum from '../enumerations/TaskEnum';
+import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Checkbox, CheckboxChangeParams } from 'primereact/checkbox';
@@ -16,6 +17,7 @@ import { InputText } from 'primereact/inputtext';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { ScrollTop } from 'primereact/scrolltop';
 import { TaskContext } from '../contexts/TaskContext';
+import { toastService } from '../../../shared/services/ToastService';
 import updateTaskRequest, {
   arrayCompletedTaskService,
   completedTaskService,
@@ -24,6 +26,8 @@ import updateTaskRequest, {
 function TasksListComponent(): JSX.Element {
   const { sortedTasks, dispatch } = useContext(TaskContext);
   const { showLoading, hideLoading } = loaderService();
+  const { showToast } = toastService();
+  const { showAlert } = alertService();
   const [tasks, setTasks] = useState(sortedTasks);
   const [description, setDescription] = useState('');
   const [isCheckAll, setIsCheckAll] = useState(false);
@@ -114,9 +118,10 @@ function TasksListComponent(): JSX.Element {
     try {
       await requestDeleteTask(id);
       setIsCheck(isCheck.filter(item => item !== id.toString()));
+      showToast('success', 'Tarefa excluída com sucesso.');
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        showAlert(error.message);
       }
     }
   };
@@ -125,9 +130,10 @@ function TasksListComponent(): JSX.Element {
     try {
       await requestCompletedTask(task);
       setIsCheck(isCheck.filter(item => item !== task.id.toString()));
+      showToast('success', 'Tarefa finalizada com sucesso.');
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        showAlert(error.message);
       }
     }
   };
@@ -136,9 +142,10 @@ function TasksListComponent(): JSX.Element {
     try {
       await requestArrayCompletedTask(isCheck.map(i => Number(i)));
       setIsCheck([]);
+      showToast('success', 'Tarefa(s) finalizada com sucesso.');
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        showAlert(error.message);
       }
     }
   };
@@ -241,9 +248,10 @@ function TasksListComponent(): JSX.Element {
       await requestUpdateTask(task);
       cancelUpdate();
       setDescription('');
+      showToast('success', 'Tarefa atualizada com sucesso.');
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        showAlert(error.message);
       }
     }
   };
@@ -267,16 +275,12 @@ function TasksListComponent(): JSX.Element {
             />
           </>
         ) : null}
-        {task?.id !== rowData.id ? (
-          <Button
-            icon='pi pi-times'
-            className='p-button-danger m-2'
-            label='Excluir'
-            onClick={() =>
-              showConfirmDialog(() => handleClickDelete(rowData.id))
-            }
-          />
-        ) : null}
+        <Button
+          icon='pi pi-times'
+          className='p-button-danger m-2'
+          label='Excluir'
+          onClick={() => showConfirmDialog(() => handleClickDelete(rowData.id))}
+        />
       </>
     );
   };
@@ -347,7 +351,7 @@ function TasksListComponent(): JSX.Element {
               </div>
               <Button
                 icon='pi pi-pencil'
-                className='p-button-info'
+                className='p-button-info mt-1'
                 label='Atualizar'
               />
             </div>
