@@ -1,6 +1,6 @@
 export default interface StateTaskInterface {
-  created_at: Date;
-  completed: boolean;
-  description: string;
   id: number;
+  description: string;
+  completed: boolean;
+  created_at: Date;
 }

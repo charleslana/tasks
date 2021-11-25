@@ -1,4 +1,5 @@
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
+import PropsFilterTaskInterface from '../interfaces/PropsFilterTaskInterface';
 import React, { useContext, useState } from 'react';
 import TaskEnum from '../enumerations/TaskEnum';
 import { Button } from 'primereact/button';
@@ -8,25 +9,10 @@ import { loaderService } from '../../../shared/services/LoaderService';
 import { TabMenu } from 'primereact/tabmenu';
 import { TaskContext } from '../contexts/TaskContext';
 
-interface IProps {
-  filterTask: (filter: FilterTaskEnum) => void;
-  clearTasks: () => void;
-}
-
-function FilterTaskComponent(props: IProps): JSX.Element {
+function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
   const { tasks, dispatch } = useContext(TaskContext);
   const { showLoading, hideLoading } = loaderService();
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const showConfirmDialog = (onClick: () => void) => {
-    confirmDialog({
-      message: 'Tem certeza de que deseja continuar?',
-      icon: 'pi pi-exclamation-triangle',
-      accept: onClick,
-      acceptLabel: 'Sim',
-      rejectLabel: 'Não',
-    });
-  };
 
   const dispatchClearTask = () => {
     dispatch?.({
@@ -55,6 +41,16 @@ function FilterTaskComponent(props: IProps): JSX.Element {
         throw new Error(err.message);
       })
       .finally(() => hideLoading());
+  };
+
+  const showConfirmDialog = (onClick: () => void) => {
+    confirmDialog({
+      message: 'Tem certeza de que deseja continuar?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: onClick,
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+    });
   };
 
   const tabItems = [

@@ -158,6 +158,21 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
+  const handleClickSelectAll = () => {
+    const isCompleted = sortedTasks?.filter(task => !task.completed);
+    if (isCompleted) {
+      if (isCompleted.length > 0) {
+        setIsCheckAll(!isCheckAll);
+        const stateTasks = tasks
+          ?.filter(task => !task.completed)
+          .map(task => task.id.toString());
+        if (stateTasks) {
+          setIsCheck(stateTasks);
+        }
+      }
+    }
+  };
+
   const handleFinish = async (task: StateTaskInterface) => {
     try {
       await requestCompletedTask(task);
@@ -178,21 +193,6 @@ function TasksListComponent(): JSX.Element {
     } catch (error) {
       if (error instanceof Error) {
         showAlert(error.message);
-      }
-    }
-  };
-
-  const handleClickSelectAll = () => {
-    const isCompleted = sortedTasks?.filter(task => !task.completed);
-    if (isCompleted) {
-      if (isCompleted.length > 0) {
-        setIsCheckAll(!isCheckAll);
-        const stateTasks = tasks
-          ?.filter(task => !task.completed)
-          .map(task => task.id.toString());
-        if (stateTasks) {
-          setIsCheck(stateTasks);
-        }
       }
     }
   };

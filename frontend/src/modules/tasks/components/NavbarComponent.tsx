@@ -11,6 +11,21 @@ function NavbarComponent(): JSX.Element {
   const { toast, hideToast, severity, detail } = toastService();
   const { alert, hideAlert, message } = alertService();
   const navigate = useNavigate();
+  const toastRef = useRef<any>();
+
+  useEffect(() => {
+    checkToast();
+  });
+
+  const checkToast = () => {
+    if (toast) {
+      toastRef.current.show({
+        severity: severity,
+        detail: detail,
+      });
+      hideToast();
+    }
+  };
 
   const menuItems = [
     {
@@ -27,30 +42,15 @@ function NavbarComponent(): JSX.Element {
     },
   ];
 
-  const start = (
-    <div className='text-3xl p-mr-2 mr-2'>Minha lista de tarefas</div>
-  );
-
-  const toastRef = useRef<any>();
-  useEffect(() => {
-    checkToast();
-  });
-
-  const checkToast = () => {
-    if (toast) {
-      toastRef.current.show({
-        severity: severity,
-        detail: detail,
-      });
-      hideToast();
-    }
-  };
-
   const renderFooter = () => {
     return (
       <Button label='Ok' icon='pi pi-check' onClick={hideAlert} autoFocus />
     );
   };
+
+  const start = (
+    <div className='text-3xl p-mr-2 mr-2'>Minha lista de tarefas</div>
+  );
 
   return (
     <>

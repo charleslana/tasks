@@ -22,10 +22,10 @@ const createTaskService = async (
 
 const initialTask = (description: string): StateTaskInterface => {
   const init = {
-    created_at: new Date(),
-    completed: false,
-    description: description,
     id: 0,
+    description: description,
+    completed: false,
+    created_at: new Date(),
   };
   return init;
 };
