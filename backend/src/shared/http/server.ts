@@ -17,16 +17,15 @@ app.use(routes);
 
 app.use(errors());
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((request: Request, response: Response, next: NextFunction) => {
   return response.status(404).json({
     status: 'error',
     message: 'Not found.',
   });
+  next();
 });
 
 app.use(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (error: Error, request: Request, response: Response, next: NextFunction) => {
     if (error instanceof AppError) {
       return response.status(error.statusCode).json({
@@ -38,6 +37,7 @@ app.use(
       status: 'error',
       message: 'Internal server error.',
     });
+    next();
   }
 );
 
