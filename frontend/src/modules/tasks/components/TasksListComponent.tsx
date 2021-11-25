@@ -384,7 +384,7 @@ function TasksListComponent(): JSX.Element {
           emptyMessage='Nenhuma tarefa foi encontrada.'
           paginator
           rows={10}
-          sortField={'created_at'}
+          sortField={'createdAt'}
           sortOrder={1}
           rowsPerPageOptions={[5, 10, 50]}
         >
@@ -396,7 +396,7 @@ function TasksListComponent(): JSX.Element {
             sortable
           ></Column>
           <Column
-            field='created_at'
+            field='createdAt'
             header='Criado em'
             body={dateBodyTemplate}
             sortable

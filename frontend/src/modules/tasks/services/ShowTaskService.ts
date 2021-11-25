@@ -21,7 +21,7 @@ const initialTask = (id: number): StateTaskInterface => {
     id: id,
     description: '',
     completed: false,
-    created_at: new Date(),
+    createdAt: new Date(),
   };
   return init;
 };
