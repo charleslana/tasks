@@ -45,6 +45,11 @@ function TaskDetailsPage(): JSX.Element {
             )}
           </p>
           <p>Data da criação: {new Date(task.created_at).toLocaleString()}</p>
+          {task.updated_at ? (
+            <p>
+              Útilma atualização: {new Date(task.updated_at).toLocaleString()}
+            </p>
+          ) : null}
         </>
       ) : null}
       <div>
