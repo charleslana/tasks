@@ -5,7 +5,9 @@ function NotFoundPage(): JSX.Element {
   return (
     <div className='p-3 text-center'>
       <h1>Página não encontrada</h1>
-      <Link to='/'>Voltar para a Home</Link>
+      <Link className='p-button' to='/'>
+        Voltar para a Home
+      </Link>
     </div>
   );
 }
