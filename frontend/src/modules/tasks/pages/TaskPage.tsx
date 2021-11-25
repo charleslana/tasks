@@ -12,6 +12,7 @@ function TaskPage(): JSX.Element {
     <BlockUI
       blocked={loading}
       className='block-ui-loading'
+      fullScreen
       template={
         <ProgressSpinner
           className='block-ui-spinner'

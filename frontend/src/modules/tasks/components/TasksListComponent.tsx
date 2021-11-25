@@ -15,7 +15,7 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { FormikErrors, useFormik } from 'formik';
-import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Link } from 'react-router-dom';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { ScrollTop } from 'primereact/scrolltop';
@@ -333,7 +333,7 @@ function TasksListComponent(): JSX.Element {
   return (
     <>
       <Dialog
-        header={task?.description}
+        header='Atualizar tarefa'
         visible={isShowDialog}
         onHide={() => cancelUpdate()}
         breakpoints={{ '960px': '75vw' }}
@@ -350,17 +350,11 @@ function TasksListComponent(): JSX.Element {
       >
         {task ? (
           <form onSubmit={formik.handleSubmit}>
-            <div className='formgroup-inline'>
+            <div className='fluid'>
               <div className='field'>
-                <label
-                  htmlFor='editDescription'
-                  className={classNames({
-                    'p-error': isFormFieldValid(),
-                  })}
-                >
-                  Descrição *
-                </label>
-                <InputText
+                <InputTextarea
+                  rows={5}
+                  cols={30}
                   id='editDescription'
                   autoFocus
                   maxLength={255}
@@ -369,14 +363,14 @@ function TasksListComponent(): JSX.Element {
                   onChange={formik.handleChange}
                   className={classNames({
                     'p-invalid': isFormFieldValid(),
+                    'w-full': true,
                   })}
                 />
                 {getFormErrorMessage()}
               </div>
               <Button
                 type='submit'
-                icon='pi pi-pencil'
-                className='p-button-info mt-1'
+                className='p-button-info mt-1 w-full'
                 label='Atualizar'
               />
             </div>
