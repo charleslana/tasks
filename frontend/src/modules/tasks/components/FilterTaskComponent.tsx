@@ -1,23 +1,20 @@
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import PropsFilterTaskInterface from '../interfaces/PropsFilterTaskInterface';
-import React, { useContext, useState } from 'react';
-import TaskEnum from '../enumerations/TaskEnum';
+import React, { useState } from 'react';
 import { Button } from 'primereact/button';
 import { clearTaskService } from '../services/DeleteTaskService';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { TabMenu } from 'primereact/tabmenu';
-import { TaskContext } from '../contexts/TaskContext';
+import { taskService } from '../services/TaskService';
 
 function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
-  const { tasks, dispatch } = useContext(TaskContext);
+  const { tasks, removeAllTask } = taskService();
   const { showLoading, hideLoading } = loaderService();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const dispatchClearTask = () => {
-    dispatch?.({
-      type: TaskEnum.REMOVE_ALL_TASK,
-    });
+    removeAllTask();
   };
 
   const handleClickRemoveAllTasks = async () => {
@@ -37,8 +34,8 @@ function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
       .then(() => {
         dispatchClearTask();
       })
-      .catch(err => {
-        throw new Error(err.message);
+      .catch(error => {
+        throw new Error(error.message);
       })
       .finally(() => hideLoading());
   };

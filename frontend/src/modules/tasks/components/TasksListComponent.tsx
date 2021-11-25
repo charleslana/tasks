@@ -3,9 +3,8 @@ import FilterTaskComponent from './FilterTaskComponent';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import FilterTaskReducer from '../reducers/FilterTaskReducer';
 import FormUpdateTaskInterface from '../interfaces/FormUpdateTaskInterface';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
-import TaskEnum from '../enumerations/TaskEnum';
 import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
@@ -19,7 +18,7 @@ import { FormikErrors, useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { ScrollTop } from 'primereact/scrolltop';
-import { TaskContext } from '../contexts/TaskContext';
+import { taskService } from '../services/TaskService';
 import { toastService } from '../../../shared/services/ToastService';
 import updateTaskRequest, {
   arrayCompletedTaskService,
@@ -27,7 +26,7 @@ import updateTaskRequest, {
 } from '../services/UpdateTaskService';
 
 function TasksListComponent(): JSX.Element {
-  const { sortedTasks, dispatch } = useContext(TaskContext);
+  const { sortedTasks, updateTask, checkTask, removeTask } = taskService();
   const { showLoading, hideLoading } = loaderService();
   const { showToast } = toastService();
   const { showAlert } = alertService();
@@ -75,34 +74,16 @@ function TasksListComponent(): JSX.Element {
   };
 
   const dispatchCompletedTask = (task: StateTaskInterface) => {
-    dispatch?.({
-      type: TaskEnum.CHECK_TASK,
-      task: {
-        created_at: task.created_at,
-        completed: task.completed,
-        description: task.description,
-        id: task.id,
-      },
-    });
+    checkTask(task);
   };
 
   const dispatchDeleteTask = (id: number) => {
-    dispatch?.({
-      type: TaskEnum.REMOVE_TASK,
-      id: id,
-    });
+    removeTask(id);
   };
 
   const dispatchUpdateTask = (task: StateTaskInterface) => {
-    dispatch?.({
-      type: TaskEnum.UPDATE_TASK,
-      task: {
-        created_at: task.created_at,
-        completed: task.completed,
-        description: formik.values.editDescription.trim(),
-        id: task.id,
-      },
-    });
+    task.description = formik.values.editDescription.trim();
+    updateTask(task);
   };
 
   const filterTask = (type: FilterTaskEnum) => {

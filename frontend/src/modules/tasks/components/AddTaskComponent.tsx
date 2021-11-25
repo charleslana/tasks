@@ -1,9 +1,8 @@
 import addTaskRequest from '../services/CreateTaskService';
 import FormAddTaskInterface from '../interfaces/FormAddTaskInterface';
 import getTasksRequest from '../services/ListTaskService';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
-import TaskEnum from '../enumerations/TaskEnum';
 import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
@@ -11,11 +10,11 @@ import { classNames } from 'primereact/utils';
 import { FormikErrors, useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { loaderService } from '../../../shared/services/LoaderService';
-import { TaskContext } from '../contexts/TaskContext';
+import { taskService } from '../services/TaskService';
 import { toastService } from '../../../shared/services/ToastService';
 
 function AddTaskComponent(): JSX.Element {
-  const { dispatch, tasks } = useContext(TaskContext);
+  const { tasks, addTask, removeAllTask } = taskService();
   const { showLoading, hideLoading } = loaderService();
   const { showToast } = toastService();
   const { showAlert } = alertService();
@@ -36,30 +35,12 @@ function AddTaskComponent(): JSX.Element {
     }
   };
 
-  const dispatchAddAllTask = (res: StateTaskInterface[]) => {
-    res.forEach(element => {
-      dispatch?.({
-        type: TaskEnum.ADD_TASK,
-        task: {
-          created_at: element.created_at,
-          completed: element.completed,
-          description: element.description,
-          id: element.id,
-        },
-      });
-    });
+  const dispatchAddAllTask = (tasks: StateTaskInterface[]) => {
+    tasks.forEach(task => addTask(task));
   };
 
   const dispatchAddTask = (task: StateTaskInterface) => {
-    dispatch?.({
-      type: TaskEnum.ADD_TASK,
-      task: {
-        created_at: task.created_at,
-        completed: task.completed,
-        description: task.description,
-        id: task.id,
-      },
-    });
+    addTask(task);
   };
 
   const formik = useFormik({
@@ -75,16 +56,14 @@ function AddTaskComponent(): JSX.Element {
   });
 
   const getAllTasks = async () => {
-    dispatch?.({
-      type: TaskEnum.REMOVE_ALL_TASK,
-    });
+    removeAllTask();
     showLoading();
     await getTasksRequest()
-      .then(res => {
-        dispatchAddAllTask(res);
+      .then(response => {
+        dispatchAddAllTask(response);
       })
-      .catch(err => {
-        showAlert(err.message);
+      .catch(error => {
+        showAlert(error.message);
       })
       .finally(() => hideLoading());
   };
@@ -105,11 +84,11 @@ function AddTaskComponent(): JSX.Element {
   const requestAddTask = async (description: string) => {
     showLoading();
     await addTaskRequest(description)
-      .then(res => {
-        dispatchAddTask(res);
+      .then(response => {
+        dispatchAddTask(response);
       })
-      .catch(err => {
-        throw new Error(err.message);
+      .catch(error => {
+        throw new Error(error.message);
       })
       .finally(() => hideLoading());
   };
