@@ -113,9 +113,7 @@ function TasksListComponent(): JSX.Element {
   const getFormErrorMessage = () => {
     return (
       isFormFieldValid() && (
-        <div className='text-right'>
-          <small className='p-error'>{formik.errors.editDescription}</small>
-        </div>
+        <small className='p-error'>{formik.errors.editDescription}</small>
       )
     );
   };
