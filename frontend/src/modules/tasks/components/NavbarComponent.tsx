@@ -11,7 +11,7 @@ function NavbarComponent(): JSX.Element {
   const { toast, hideToast, severity, detail } = toastService();
   const { alert, hideAlert, message } = alertService();
   const navigate = useNavigate();
-  const toastRef = useRef<any>();
+  const toastRef = useRef<Toast>(null);
 
   useEffect(() => {
     checkToast();
@@ -19,7 +19,7 @@ function NavbarComponent(): JSX.Element {
 
   const checkToast = () => {
     if (toast) {
-      toastRef.current.show({
+      toastRef.current?.show({
         severity: severity,
         detail: detail,
       });

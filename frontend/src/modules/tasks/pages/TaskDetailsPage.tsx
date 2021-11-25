@@ -32,7 +32,7 @@ function TaskDetailsPage(): JSX.Element {
   };
 
   return (
-    <div className='p-3'>
+    <div className='p-3 text-center'>
       {task ? (
         <>
           <h1>{task.description}</h1>

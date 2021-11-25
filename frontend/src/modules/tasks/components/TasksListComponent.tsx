@@ -16,6 +16,7 @@ import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { FormikErrors, useFormik } from 'formik';
 import { InputText } from 'primereact/inputtext';
+import { Link } from 'react-router-dom';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { ScrollTop } from 'primereact/scrolltop';
 import { taskService } from '../services/TaskService';
@@ -24,7 +25,6 @@ import updateTaskRequest, {
   arrayCompletedTaskService,
   completedTaskService,
 } from '../services/UpdateTaskService';
-import { Link } from 'react-router-dom';
 
 function TasksListComponent(): JSX.Element {
   const { sortedTasks, updateTask, checkTask, removeTask } = taskService();
@@ -394,6 +394,7 @@ function TasksListComponent(): JSX.Element {
           rows={10}
           sortField={'created_at'}
           sortOrder={1}
+          rowsPerPageOptions={[5, 10, 50]}
         >
           <Column header='' body={checkboxBodyTemplate}></Column>
           <Column

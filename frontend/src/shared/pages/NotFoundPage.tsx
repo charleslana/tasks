@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 
 function NotFoundPage(): JSX.Element {
   return (
-    <>
+    <div className='p-3 text-center'>
       <h1>Página não encontrada</h1>
-      <div>
-        <Link to='/'>Voltar para a Home</Link>
-      </div>
-    </>
+      <Link to='/'>Voltar para a Home</Link>
+    </div>
   );
 }
 
