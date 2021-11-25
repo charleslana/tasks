@@ -303,7 +303,7 @@ function TasksListComponent(): JSX.Element {
   };
 
   const dateBodyTemplate = (task: StateTaskInterface) => {
-    return new Date(task.created_at).toLocaleDateString();
+    return new Date(task.createdAt).toLocaleDateString();
   };
 
   const descriptionBodyTemplate = (task: StateTaskInterface) => {

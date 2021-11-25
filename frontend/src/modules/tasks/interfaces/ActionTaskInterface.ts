@@ -6,7 +6,7 @@ export default interface ActionTaskInterface {
     id: number;
     description: string;
     completed: boolean;
-    created_at: Date;
+    createdAt: Date;
   };
   type: TaskEnum;
 }

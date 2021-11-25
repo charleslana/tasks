@@ -1,3 +1,4 @@
+import { Exclude, Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -21,9 +22,12 @@ class Task {
   })
   completed: boolean;
 
+  @Expose({ name: 'createdAt' })
   @CreateDateColumn()
   created_at: Date;
 
+  @Expose({ name: 'updatedAt' })
+  @Exclude({ toPlainOnly: true })
   @UpdateDateColumn()
   updated_at: Date;
 }

@@ -44,10 +44,10 @@ function TaskDetailsPage(): JSX.Element {
               <Badge value='Ativo' severity='info'></Badge>
             )}
           </p>
-          <p>Data da criação: {new Date(task.created_at).toLocaleString()}</p>
-          {task.updated_at ? (
+          <p>Data da criação: {new Date(task.createdAt).toLocaleString()}</p>
+          {task.updatedAt ? (
             <p>
-              Útilma atualização: {new Date(task.updated_at).toLocaleString()}
+              Útilma atualização: {new Date(task.updatedAt).toLocaleString()}
             </p>
           ) : null}
         </>

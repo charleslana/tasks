@@ -20,17 +20,17 @@ export const taskService = (): {
         id: task.id,
         description: task.description,
         completed: task.completed,
-        created_at: task.created_at,
+        createdAt: task.createdAt,
       },
     });
   const checkTask = (task: StateTaskInterface) =>
     dispatch?.({
       type: TaskEnum.CHECK_TASK,
       task: {
-        created_at: task.created_at,
-        completed: task.completed,
-        description: task.description,
         id: task.id,
+        description: task.description,
+        completed: task.completed,
+        createdAt: task.createdAt,
       },
     });
   const removeAllTask = () =>
@@ -46,10 +46,10 @@ export const taskService = (): {
     dispatch?.({
       type: TaskEnum.UPDATE_TASK,
       task: {
-        created_at: task.created_at,
-        completed: task.completed,
-        description: task.description,
         id: task.id,
+        description: task.description,
+        completed: task.completed,
+        createdAt: task.createdAt,
       },
     });
   return {
