@@ -24,6 +24,7 @@ import updateTaskRequest, {
   arrayCompletedTaskService,
   completedTaskService,
 } from '../services/UpdateTaskService';
+import { Link } from 'react-router-dom';
 
 function TasksListComponent(): JSX.Element {
   const { sortedTasks, updateTask, checkTask, removeTask } = taskService();
@@ -184,11 +185,11 @@ function TasksListComponent(): JSX.Element {
   const requestArrayCompletedTask = async (ids: number[]) => {
     showLoading();
     await arrayCompletedTaskService(ids)
-      .then(res => {
-        dispatchArrayCompletedTask(res);
+      .then(response => {
+        dispatchArrayCompletedTask(response);
       })
-      .catch(err => {
-        throw new Error(err.message);
+      .catch(error => {
+        throw new Error(error.message);
       })
       .finally(() => hideLoading());
   };
@@ -196,11 +197,11 @@ function TasksListComponent(): JSX.Element {
   const requestCompletedTask = async (task: StateTaskInterface) => {
     showLoading();
     await completedTaskService(task)
-      .then(res => {
-        dispatchCompletedTask(res);
+      .then(response => {
+        dispatchCompletedTask(response);
       })
-      .catch(err => {
-        throw new Error(err.message);
+      .catch(error => {
+        throw new Error(error.message);
       })
       .finally(() => hideLoading());
   };
@@ -211,8 +212,8 @@ function TasksListComponent(): JSX.Element {
       .then(() => {
         dispatchDeleteTask(id);
       })
-      .catch(err => {
-        throw new Error(err.message);
+      .catch(error => {
+        throw new Error(error.message);
       })
       .finally(() => hideLoading());
   };
@@ -221,11 +222,11 @@ function TasksListComponent(): JSX.Element {
     task.description = formik.values.editDescription.trim();
     showLoading();
     await updateTaskRequest(task)
-      .then(res => {
-        dispatchUpdateTask(res);
+      .then(response => {
+        dispatchUpdateTask(response);
       })
-      .catch(err => {
-        throw new Error(err.message);
+      .catch(error => {
+        throw new Error(error.message);
       })
       .finally(() => hideLoading());
   };
@@ -260,22 +261,22 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const actionsBodyTemplate = (rowData: StateTaskInterface) => {
+  const actionsBodyTemplate = (task: StateTaskInterface) => {
     return (
       <>
-        {!rowData.completed ? (
+        {!task.completed ? (
           <>
             <Button
               icon='pi pi-pencil'
               className='p-button-info m-2'
               label='Editar'
-              onClick={() => showEdit(rowData)}
+              onClick={() => showEdit(task)}
             />
             <Button
               icon='pi pi-check'
               className='p-button-success m-2'
               label='Finalizar'
-              onClick={() => showConfirmDialog(() => handleFinish(rowData))}
+              onClick={() => showConfirmDialog(() => handleFinish(task))}
             />
           </>
         ) : null}
@@ -283,34 +284,44 @@ function TasksListComponent(): JSX.Element {
           icon='pi pi-times'
           className='p-button-danger m-2'
           label='Excluir'
-          onClick={() => showConfirmDialog(() => handleClickDelete(rowData.id))}
+          onClick={() => showConfirmDialog(() => handleClickDelete(task.id))}
         />
       </>
     );
   };
 
-  const checkboxBodyTemplate = (rowData: StateTaskInterface) => {
+  const checkboxBodyTemplate = (task: StateTaskInterface) => {
     return (
       <>
-        {!rowData.completed ? (
+        {!task.completed ? (
           <Checkbox
-            id={rowData.id.toString()}
+            id={task.id.toString()}
             onChange={handleClickCheck}
-            checked={isCheck.includes(rowData.id.toString())}
+            checked={isCheck.includes(task.id.toString())}
           ></Checkbox>
         ) : null}
       </>
     );
   };
 
-  const dateBodyTemplate = (rowData: StateTaskInterface) => {
-    return new Date(rowData.created_at).toLocaleDateString();
+  const dateBodyTemplate = (task: StateTaskInterface) => {
+    return new Date(task.created_at).toLocaleDateString();
   };
 
-  const statusBodyTemplate = (rowData: StateTaskInterface) => {
+  const descriptionBodyTemplate = (task: StateTaskInterface) => {
     return (
       <>
-        {rowData.completed ? (
+        {task.description}
+        <br />
+        <Link to={`task/${task.id}`}>Ver tarefa</Link>
+      </>
+    );
+  };
+
+  const statusBodyTemplate = (task: StateTaskInterface) => {
+    return (
+      <>
+        {task.completed ? (
           <Badge value='Finalizado' severity='success'></Badge>
         ) : (
           <Badge value='Ativo' severity='info'></Badge>
@@ -385,7 +396,12 @@ function TasksListComponent(): JSX.Element {
           sortOrder={1}
         >
           <Column header='' body={checkboxBodyTemplate}></Column>
-          <Column field='description' header='Tarefas' sortable></Column>
+          <Column
+            field='description'
+            header='Tarefas'
+            body={descriptionBodyTemplate}
+            sortable
+          ></Column>
           <Column
             field='created_at'
             header='Criado em'
