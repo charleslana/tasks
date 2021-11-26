@@ -1,3 +1,4 @@
+import CreateHistoricService from '../../histories/services/CreateHistoricService';
 import CreateTaskService from '../services/CreateTaskService';
 import DeleteTaskService from '../services/DeleteTaskService';
 import ListTaskService from '../services/ListTaskService';
@@ -41,6 +42,11 @@ export default class TaskController {
     const { description } = request.body;
     const createTaskService = new CreateTaskService();
     const task = await createTaskService.execute({ description: description });
+    const createHistoricService = new CreateHistoricService();
+    await createHistoricService.execute({
+      description: description,
+      task: task,
+    });
     return response.status(201).json(instanceToPlain(task));
   }
 
@@ -73,6 +79,11 @@ export default class TaskController {
     const task = await updateTaskService.execute({
       id: parseInt(id),
       description: description,
+    });
+    const createHistoricService = new CreateHistoricService();
+    await createHistoricService.execute({
+      description: description,
+      task: task,
     });
     return response.json(instanceToPlain(task));
   }

@@ -1,8 +1,10 @@
+import Historic from '../../../histories/typeorm/entities/Historic';
 import { Exclude, Expose } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,6 +32,10 @@ class Task {
   @Exclude({ toPlainOnly: true })
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({ name: 'historiesTask' })
+  @OneToMany(() => Historic, histories_task => histories_task.task)
+  histories_task: Historic[];
 }
 
 export default Task;

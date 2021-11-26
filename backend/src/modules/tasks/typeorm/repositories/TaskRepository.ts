@@ -11,7 +11,14 @@ export class TaskRepository extends Repository<Task> {
         description,
       },
     });
-
     return task;
+  }
+
+  public async findByIdWithHistories(id: number): Promise<Task | undefined> {
+    return await this.createQueryBuilder('tasks')
+      .select(['tasks', 'histories_task'])
+      .leftJoin('tasks.histories_task', 'histories_task')
+      .where({ id })
+      .getOne();
   }
 }
