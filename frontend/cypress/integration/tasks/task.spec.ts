@@ -146,7 +146,7 @@ context('Módulo Tarefas', () => {
       task.taskNotFound();
     });
 
-    it('Selecionar o checkbox da lista de tarefas e desmarcar, o botão selecionar todos deve aparecer quando marcado e desaparecer quando desmarcado.', () => {
+    it('Selecionar o checkbox da lista de tarefas e desmarcar, o botão selecionar todas deve aparecer quando marcado e desaparecer quando desmarcado.', () => {
       task.removeAllTasks();
       task.create(text);
       task.selectCheckbox().click();
@@ -155,7 +155,7 @@ context('Módulo Tarefas', () => {
       task.btnFinishSelected().should('not.exist');
     });
 
-    it('Selecionar todas e desmarcar todas, o botão selecionar todos deve aparecer quando marcado e desaparecer quando desmarcado.', () => {
+    it('Selecionar todas e desmarcar todas, o botão selecionar todas deve aparecer quando marcado e desaparecer quando desmarcado.', () => {
       task.removeAllTasks();
       task.create(text);
       task.btnSelectAll().click();

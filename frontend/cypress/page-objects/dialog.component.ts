@@ -29,6 +29,6 @@ export class DialogComponent {
   }
 
   alertDialog() {
-    return cy.get('[style="z-index: 1102;"]');
+    return cy.get('#pr_id_7_header');
   }
 }
