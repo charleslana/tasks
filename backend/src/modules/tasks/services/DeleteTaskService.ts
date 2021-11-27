@@ -10,7 +10,7 @@ class DeleteTaskService {
     if (!task) {
       throw new AppError('Nenhuma tarefa foi encontrada.');
     }
-    await taskRepository.clear();
+    await taskRepository.clearTasks();
   }
 
   public async execute({ id }: DeleteTaskInterface): Promise<void> {

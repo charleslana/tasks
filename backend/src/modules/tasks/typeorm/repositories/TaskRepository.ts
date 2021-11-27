@@ -3,6 +3,10 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Task)
 export class TaskRepository extends Repository<Task> {
+  public async clearTasks(): Promise<void> {
+    await this.createQueryBuilder('tasks').delete().execute();
+  }
+
   public async findByDescription(
     description: string
   ): Promise<Task | undefined> {

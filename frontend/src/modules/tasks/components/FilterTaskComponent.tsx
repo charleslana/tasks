@@ -1,16 +1,20 @@
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import PropsFilterTaskInterface from '../interfaces/PropsFilterTaskInterface';
 import React, { useState } from 'react';
+import { alertService } from '../../../shared/services/AlertService';
 import { Button } from 'primereact/button';
 import { clearTaskService } from '../services/DeleteTaskService';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { TabMenu } from 'primereact/tabmenu';
 import { taskService } from '../services/TaskService';
+import { toastService } from '../../../shared/services/ToastService';
 
 function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
   const { tasks, removeAllTask } = taskService();
   const { showLoading, hideLoading } = loaderService();
+  const { showToast } = toastService();
+  const { showAlert } = alertService();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const dispatchClearTask = () => {
@@ -21,9 +25,10 @@ function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
     try {
       await requestClearTasks();
       props.clearTasks();
+      showToast('success', 'Tarefa(s) excluída com sucesso.');
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        showAlert(error.message);
       }
     }
   };
@@ -47,6 +52,7 @@ function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
       accept: onClick,
       acceptLabel: 'Sim',
       rejectLabel: 'Não',
+      draggable: false,
     });
   };
 
@@ -78,6 +84,7 @@ function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
         <div className='col-12 md:col-3 lg:col-3'>
           {tasks && tasks.length > 0 ? (
             <Button
+              id='btnRemoveAllTasks'
               icon='pi pi-times'
               className='p-button-danger'
               label='Remover todas as tarefas'

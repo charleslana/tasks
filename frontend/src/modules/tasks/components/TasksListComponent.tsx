@@ -236,6 +236,7 @@ function TasksListComponent(): JSX.Element {
       accept: onClick,
       acceptLabel: 'Sim',
       rejectLabel: 'Não',
+      draggable: false,
     });
   };
 
