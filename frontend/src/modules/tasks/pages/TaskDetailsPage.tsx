@@ -5,6 +5,7 @@ import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Link } from 'react-router-dom';
 import { loaderService } from '../../../shared/services/LoaderService';
+import { Timeline } from 'primereact/timeline';
 import { useParams } from 'react-router';
 
 function TaskDetailsPage(): JSX.Element {
@@ -50,6 +51,17 @@ function TaskDetailsPage(): JSX.Element {
               Útilma atualização: {new Date(task.updatedAt).toLocaleString()}
             </p>
           ) : null}
+          <h3>Histórico</h3>
+          <Timeline
+            className='mb-5'
+            value={task.historiesTask}
+            opposite={item => item.description}
+            content={item => (
+              <small className='p-text-secondary'>
+                {new Date(item.createdAt).toLocaleString()}
+              </small>
+            )}
+          />
         </>
       ) : null}
       <div>

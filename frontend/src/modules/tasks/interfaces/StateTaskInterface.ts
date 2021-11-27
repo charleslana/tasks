@@ -4,4 +4,9 @@ export default interface StateTaskInterface {
   completed: boolean;
   createdAt: Date;
   updatedAt?: Date;
+  historiesTask?: {
+    id: number;
+    description: string;
+    createdAt: Date;
+  }[];
 }
