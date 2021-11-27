@@ -15,7 +15,7 @@ const fixedText = 'Um texto';
 
 context('Módulo Tarefas', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit(task.urlTask);
     text = Random.generateText();
   });
 
@@ -38,6 +38,13 @@ context('Módulo Tarefas', () => {
     it('Criar a tarefa com sucesso', () => {
       loadingComponent.loading();
       task.create(text);
+    });
+
+    it('Criar a tarefa com uma descrição existente.', () => {
+      task.removeAllTasks();
+      task.create(text);
+      task.create(text, false);
+      dialogComponent.alertDialog().should('be.visible');
     });
 
     it('Remover todas as tarefas, na confirmação acionar o botão Não.', () => {
@@ -194,7 +201,7 @@ context('Módulo Tarefas', () => {
       task.create(text);
       task.create(fixedText);
       task.sortByTask().click();
-      task.checkSortByTask(fixedText);
+      task.checkFirstText(fixedText);
     });
 
     it('Filtrar por tarefas ativas.', () => {
@@ -209,6 +216,29 @@ context('Módulo Tarefas', () => {
       task.create(text);
       task.filterByFinished().click();
       task.taskNotFound();
+    });
+
+    it('Paginar tarefas', () => {
+      task.removeAllTasks();
+      task.create('1');
+      task.create('2');
+      task.create('3');
+      task.create('4');
+      task.create('5');
+      task.create('6');
+      task.openSelectPage().click();
+      task.choseSelectPage().click();
+      task.selectEndPage().click();
+      task.checkFirstText('6');
+    });
+
+    it('Ver tarefa', () => {
+      task.removeAllTasks();
+      task.create(text);
+      task.linkShowTask().click();
+      task.checkUrlTaskDetails();
+      loadingComponent.loading();
+      task.titleTaskDetails().should('have.text', text);
     });
   });
 });

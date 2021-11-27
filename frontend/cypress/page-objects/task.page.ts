@@ -9,10 +9,27 @@ const toastComponent = new ToastComponent();
 const dialogComponent = new DialogComponent();
 
 export class TaskPage {
+  urlTask = '/';
   #textNoTask = 'Nenhuma tarefa foi encontrada.';
 
-  inputDescription() {
-    return cy.get('#description');
+  btnDelete() {
+    return cy.get(':nth-child(5) > .p-button-danger').first();
+  }
+
+  btnDeselectAll() {
+    return cy.get('.p-3 > :nth-child(5)').first();
+  }
+
+  btnEdit() {
+    return cy.get('.p-button-info').first();
+  }
+
+  btnFinish() {
+    return cy.get(':nth-child(5) > .p-button-success').first();
+  }
+
+  btnFinishSelected() {
+    return cy.get('#btnFinishSelected');
   }
 
   btnRegister() {
@@ -23,15 +40,64 @@ export class TaskPage {
     return cy.get('#btnRemoveAllTasks');
   }
 
-  create(text: string) {
-    this.inputDescription().type(text);
-    this.btnRegister().click();
-    loadingComponent.loading();
-    toastComponent.toastSuccess();
+  btnSelectAll() {
+    return cy.get('.p-button-warning').first();
   }
 
-  btnEdit() {
-    return cy.get('.p-button-info').first();
+  checkFirstText(text: string) {
+    return cy
+      .get('.p-datatable-tbody > tr > :nth-child(2)')
+      .first()
+      .should('have.text', `${text}Ver tarefa`);
+  }
+
+  checkUrlTaskDetails() {
+    return cy.url().should('contain', '/task');
+  }
+
+  choseSelectPage() {
+    return cy.get('[aria-label="5"]').first();
+  }
+
+  create(text: string, isLoading = true) {
+    this.inputDescription().type(text);
+    this.btnRegister().click();
+    if (isLoading) {
+      loadingComponent.loading();
+      toastComponent.toastSuccess();
+    }
+  }
+
+  createRequiredField() {
+    return cy.get('.text-right > .p-error');
+  }
+
+  filterByActive() {
+    return cy
+      .get(
+        '.p-tabmenu-nav > :nth-child(2) > .p-menuitem-link > .p-menuitem-text'
+      )
+      .should('have.text', 'Ativos');
+  }
+
+  filterByFinished() {
+    return cy
+      .get(
+        '.p-tabmenu-nav > :nth-child(3) > .p-menuitem-link > .p-menuitem-text'
+      )
+      .should('have.text', 'Finalizados');
+  }
+
+  inputDescription() {
+    return cy.get('#description');
+  }
+
+  linkShowTask() {
+    return cy.get('tr > :nth-child(2) > a').first();
+  }
+
+  openSelectPage() {
+    return cy.get('.p-dropdown-trigger').first();
   }
 
   removeAllTasks() {
@@ -51,44 +117,20 @@ export class TaskPage {
     });
   }
 
-  btnFinish() {
-    return cy.get(':nth-child(5) > .p-button-success').first();
-  }
-
-  btnDelete() {
-    return cy.get(':nth-child(5) > .p-button-danger').first();
-  }
-
-  tableActions() {
-    return cy.get(':nth-child(5)').first();
-  }
-
-  createRequiredField() {
-    return cy.get('.text-right > .p-error');
-  }
-
-  updateRequiredField() {
-    return cy.get('.p-error');
-  }
-
-  taskNotFound() {
-    return cy.get('td').should('have.text', this.#textNoTask);
-  }
-
   selectCheckbox() {
     return cy.get('.p-checkbox-box').first();
   }
 
-  btnFinishSelected() {
-    return cy.get('#btnFinishSelected');
+  selectEndPage() {
+    return cy.get('.p-paginator-page-end').first();
   }
 
-  btnSelectAll() {
-    return cy.get('.p-button-warning').first();
+  sortByTask() {
+    return cy.get('tr > .p-highlight').first();
   }
 
-  btnDeselectAll() {
-    return cy.get('.p-3 > :nth-child(5)').first();
+  tableActions() {
+    return cy.get(':nth-child(5)').first();
   }
 
   taskActive() {
@@ -105,30 +147,15 @@ export class TaskPage {
       .should('have.text', 'Finalizado');
   }
 
-  sortByTask() {
-    return cy.get('tr > .p-highlight').first();
+  taskNotFound() {
+    return cy.get('td').should('have.text', this.#textNoTask);
   }
 
-  checkSortByTask(text: string) {
-    return cy
-      .get('.p-datatable-tbody > tr > :nth-child(2)')
-      .first()
-      .should('have.text', `${text}Ver tarefa`);
+  titleTaskDetails() {
+    return cy.get('h1').first();
   }
 
-  filterByActive() {
-    return cy
-      .get(
-        '.p-tabmenu-nav > :nth-child(2) > .p-menuitem-link > .p-menuitem-text'
-      )
-      .should('have.text', 'Ativos');
-  }
-
-  filterByFinished() {
-    return cy
-      .get(
-        '.p-tabmenu-nav > :nth-child(3) > .p-menuitem-link > .p-menuitem-text'
-      )
-      .should('have.text', 'Finalizados');
+  updateRequiredField() {
+    return cy.get('.p-error');
   }
 }
