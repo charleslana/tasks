@@ -434,6 +434,7 @@ function TasksListComponent(): JSX.Element {
       ) : null}
       {tasks?.length === 0 || isCheck.length === 0 ? null : (
         <Button
+          id='btnFinishSelected'
           icon='pi pi-check'
           className='p-button-success m-2 fadein animation-duration-500'
           label='Finalizar selecionadas'
