@@ -6,7 +6,7 @@ import { ToastComponent } from '../../page-objects/toast.component';
 // eslint-disable-next-line spaced-comment
 /// <reference types="cypress" />
 
-const task = new TaskPage();
+const taskPage = new TaskPage();
 const loadingComponent = new LoadingComponent();
 const toastComponent = new ToastComponent();
 const dialogComponent = new DialogComponent();
@@ -15,7 +15,7 @@ const fixedText = 'Um texto';
 
 context('Módulo Tarefas', () => {
   beforeEach(() => {
-    cy.visit(task.urlTask);
+    cy.visit(taskPage.url);
     text = Random.generateText();
   });
 
@@ -30,59 +30,65 @@ context('Módulo Tarefas', () => {
 
     it('Criar a tarefa, campo descrição obrigatório.', () => {
       loadingComponent.loading();
-      task.inputDescription().type(' ');
-      task.btnRegister().click();
-      task.createRequiredField().should('be.visible');
+      taskPage.inputDescription().type(' ');
+      taskPage.btnRegister().click();
+      taskPage.createRequiredField().should('be.visible');
     });
 
     it('Criar a tarefa com sucesso', () => {
       loadingComponent.loading();
-      task.create(text);
+      taskPage.create(text);
     });
 
     it('Criar a tarefa com uma descrição existente.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.create(text, false);
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.create(text, false);
       dialogComponent.alertDialog().should('be.visible');
+    });
+
+    it('Criar a tarefa e validar o contador', () => {
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.countTasksTotal().should('have.text', 1);
     });
 
     it('Remover todas as tarefas, na confirmação acionar o botão Não.', () => {
       loadingComponent.loading();
-      task.create(text);
-      task.btnRemoveAll().should('be.visible');
-      task.btnRemoveAll().click();
+      taskPage.create(text);
+      taskPage.btnRemoveAll().should('be.visible');
+      taskPage.btnRemoveAll().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnNo().click();
       dialogComponent.isVisible().should('not.exist');
     });
 
     it('Remover todas as tarefas, na confirmação acionar o botão Sim.', () => {
-      task.removeAllTasks();
+      taskPage.removeAllTasks();
     });
 
     it('Editar a tarefa, campo descrição deve vir preenchido.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnEdit().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnEdit().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.inputEditDescription().should('have.value', text);
     });
 
     it('Editar a tarefa, campo descrição obrigatório.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnEdit().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnEdit().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.inputEditDescription().clear().type(' ');
       dialogComponent.btnUpdate().click();
-      task.updateRequiredField().should('be.visible');
+      taskPage.updateRequiredField().should('be.visible');
     });
 
     it('Editar a tarefa e confirmar com sucesso.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnEdit().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnEdit().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.inputEditDescription().clear().type(`${text} atualizado`);
       dialogComponent.btnUpdate().click();
@@ -93,18 +99,18 @@ context('Módulo Tarefas', () => {
 
     it('Editar a tarefa e Cancelar.', () => {
       loadingComponent.loading();
-      task.create(text);
-      task.btnEdit().click();
+      taskPage.create(text);
+      taskPage.btnEdit().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnCancel().click();
       dialogComponent.isVisible().should('not.exist');
     });
 
     it('Editar a tarefa com uma descrição existente.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.create(fixedText);
-      task.btnEdit().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.create(fixedText);
+      taskPage.btnEdit().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.inputEditDescription().clear().type(fixedText);
       dialogComponent.btnUpdate().click();
@@ -112,133 +118,133 @@ context('Módulo Tarefas', () => {
     });
 
     it('Finalizar a tarefa, na confirmação acionar o botão Não.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnFinish().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnFinish().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnNo().click();
       dialogComponent.isVisible().should('not.exist');
     });
 
     it('Finalizar a tarefa, na confirmação acionar o botão Sim.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnFinish().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnFinish().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnYes().click();
       dialogComponent.isVisible().should('not.be.visible');
       loadingComponent.loading();
       toastComponent.toastSuccess();
-      task.tableActions().should('have.length', '1');
+      taskPage.tableActions().should('have.length', '1');
     });
 
     it('Excluir a tarefa, na confirmação acionar o botão Não.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnDelete().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnDelete().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnNo().click();
       dialogComponent.isVisible().should('not.exist');
     });
 
     it('Excluir a tarefa, na confirmação acionar o botão Sim.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnDelete().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnDelete().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnYes().click();
       dialogComponent.isVisible().should('not.be.visible');
       loadingComponent.loading();
       toastComponent.toastSuccess();
-      task.taskNotFound();
+      taskPage.taskNotFound();
     });
 
     it('Selecionar o checkbox da lista de tarefas e desmarcar, o botão selecionar todas deve aparecer quando marcado e desaparecer quando desmarcado.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.selectCheckbox().click();
-      task.btnFinishSelected().should('be.visible');
-      task.selectCheckbox().click();
-      task.btnFinishSelected().should('not.exist');
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.selectCheckbox().click();
+      taskPage.btnFinishSelected().should('be.visible');
+      taskPage.selectCheckbox().click();
+      taskPage.btnFinishSelected().should('not.exist');
     });
 
     it('Selecionar todas e desmarcar todas, o botão selecionar todas deve aparecer quando marcado e desaparecer quando desmarcado.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnSelectAll().click();
-      task.btnFinishSelected().should('be.visible');
-      task.btnDeselectAll().click();
-      task.btnFinishSelected().should('not.exist');
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnSelectAll().click();
+      taskPage.btnFinishSelected().should('be.visible');
+      taskPage.btnDeselectAll().click();
+      taskPage.btnFinishSelected().should('not.exist');
     });
 
     it('Selecionar todas e finalizar todas, na confirmação acionar o botão Não.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnSelectAll().click();
-      task.btnFinishSelected().should('be.visible');
-      task.btnFinishSelected().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnSelectAll().click();
+      taskPage.btnFinishSelected().should('be.visible');
+      taskPage.btnFinishSelected().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnNo().click();
       dialogComponent.isVisible().should('not.exist');
     });
 
     it('Selecionar todas e finalizar todas, na confirmação acionar o botão Sim.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.btnSelectAll().click();
-      task.btnFinishSelected().should('be.visible');
-      task.btnFinishSelected().click();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.btnSelectAll().click();
+      taskPage.btnFinishSelected().should('be.visible');
+      taskPage.btnFinishSelected().click();
       dialogComponent.isVisible().should('be.visible');
       dialogComponent.btnYes().click();
       dialogComponent.isVisible().should('not.be.visible');
       loadingComponent.loading();
       toastComponent.toastSuccess();
-      task.taskFinished();
+      taskPage.taskFinished();
     });
 
     it('Ordernar por tarefa em ordem decrescente.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.create(fixedText);
-      task.sortByTask().click();
-      task.checkFirstText(fixedText);
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.create(fixedText);
+      taskPage.sortByTask().click();
+      taskPage.checkFirstText(fixedText);
     });
 
     it('Filtrar por tarefas ativas.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.filterByActive().click();
-      task.taskActive();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.filterByActive().click();
+      taskPage.taskActive();
     });
 
     it('Filtrar por tarefas finalizadas.', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.filterByFinished().click();
-      task.taskNotFound();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.filterByFinished().click();
+      taskPage.taskNotFound();
     });
 
     it('Paginar tarefas', () => {
-      task.removeAllTasks();
-      task.create('1');
-      task.create('2');
-      task.create('3');
-      task.create('4');
-      task.create('5');
-      task.create('6');
-      task.openSelectPage().click();
-      task.choseSelectPage().click();
-      task.selectEndPage().click();
-      task.checkFirstText('6');
+      taskPage.removeAllTasks();
+      taskPage.create('1');
+      taskPage.create('2');
+      taskPage.create('3');
+      taskPage.create('4');
+      taskPage.create('5');
+      taskPage.create('6');
+      taskPage.openSelectPage().click();
+      taskPage.choseSelectPage().click();
+      taskPage.selectEndPage().click();
+      taskPage.checkFirstText('6');
     });
 
     it('Ver tarefa', () => {
-      task.removeAllTasks();
-      task.create(text);
-      task.linkShowTask().click();
-      task.checkUrlTaskDetails();
+      taskPage.removeAllTasks();
+      taskPage.create(text);
+      taskPage.linkShowTask().click();
+      taskPage.checkUrlTaskDetails();
       loadingComponent.loading();
-      task.titleTaskDetails().should('have.text', text);
+      taskPage.titleTaskDetails().should('have.text', text);
     });
   });
 });

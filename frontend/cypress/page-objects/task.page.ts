@@ -9,7 +9,7 @@ const toastComponent = new ToastComponent();
 const dialogComponent = new DialogComponent();
 
 export class TaskPage {
-  urlTask = '/';
+  url = '/';
   #textNoTask = 'Nenhuma tarefa foi encontrada.';
 
   btnDelete() {
@@ -70,6 +70,10 @@ export class TaskPage {
 
   createRequiredField() {
     return cy.get('.text-right > .p-error');
+  }
+
+  countTasksTotal() {
+    return cy.get(':nth-child(1) > h4 > .p-badge');
   }
 
   filterByActive() {
