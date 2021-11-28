@@ -41,9 +41,9 @@
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
     "cy:open": "npx cypress open",
-    "cy:line": "cypress run --config video=false --spec cypress/integration/tasks/about.spec.ts,cypress/integration/tasks/not-found.spec.ts,cypress/integration/tasks/task.spec.ts",
-    "cy:video": "cypress run --browser chrome --spec cypress/integration/tasks/about.spec.ts,cypress/integration/tasks/not-found.spec.ts,cypress/integration/tasks/task.spec.ts",
-    "cy:head": "cypress run --headed --config video=false --spec cypress/integration/tasks/about.spec.ts,cypress/integration/tasks/not-found.spec.ts,cypress/integration/tasks/task.spec.ts"
+    "cy:line": "cypress run --config video=false --spec cypress/integration/about/about.spec.ts,cypress/integration/not-found/not-found.spec.ts,cypress/integration/tasks/task.spec.ts",
+    "cy:video": "cypress run --browser chrome --spec cypress/integration/about/about.spec.ts,cypress/integration/not-found/not-found.spec.ts,cypress/integration/tasks/task.spec.ts",
+    "cy:head": "cypress run --headed --config video=false --spec cypress/integration/about/about.spec.ts,cypress/integration/not-found/not-found.spec.ts,cypress/integration/tasks/task.spec.ts"
   },
   "eslintConfig": {
     "extends": [
