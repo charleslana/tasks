@@ -1,5 +1,5 @@
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
-import PropsFilterTaskInterface from '../interfaces/PropsFilterTaskInterface';
+import IPropsFilterTask from '../models/IPropsFilterTask';
 import React, { useState } from 'react';
 import { alertService } from '../../../shared/services/AlertService';
 import { Button } from 'primereact/button';
@@ -10,7 +10,7 @@ import { TabMenu } from 'primereact/tabmenu';
 import { taskService } from '../services/TaskService';
 import { toastService } from '../../../shared/services/ToastService';
 
-function FilterTaskComponent(props: PropsFilterTaskInterface): JSX.Element {
+function FilterTaskComponent(props: IPropsFilterTask): JSX.Element {
   const { tasks, removeAllTask } = taskService();
   const { showLoading, hideLoading } = loaderService();
   const { showToast } = toastService();

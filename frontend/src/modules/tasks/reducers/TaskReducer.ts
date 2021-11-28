@@ -1,11 +1,11 @@
-import ActionTaskInterface from '../interfaces/ActionTaskInterface';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
+import IActionTask from '../models/IActionTask';
+import IStateTask from '../models/IStateTask';
 import TaskEnum from '../enumerations/TaskEnum';
 
 const taskReducer = (
-  state: StateTaskInterface[],
-  action: ActionTaskInterface
-): StateTaskInterface[] => {
+  state: IStateTask[],
+  action: IActionTask
+): IStateTask[] => {
   switch (action.type) {
     case TaskEnum.ADD_TASK: {
       if (action.task) {
@@ -16,16 +16,16 @@ const taskReducer = (
     case TaskEnum.CHECK_TASK: {
       if (action.task) {
         const taskIndex = state.findIndex(
-          (task: StateTaskInterface) => task.id === action.task?.id
+          (task: IStateTask) => task.id === action.task?.id
         );
         state[taskIndex].completed = action.task.completed;
       }
-      return state.filter((task: StateTaskInterface) => task.id !== action.id);
+      return state.filter((task: IStateTask) => task.id !== action.id);
     }
     case TaskEnum.REMOVE_ALL_TASK:
       return (state = []);
     case TaskEnum.REMOVE_TASK:
-      return state.filter((task: StateTaskInterface) => task.id !== action.id);
+      return state.filter((task: IStateTask) => task.id !== action.id);
     case TaskEnum.UPDATE_TASK:
       return state.map(task =>
         task.id === action.task?.id

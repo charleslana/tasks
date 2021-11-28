@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function NotFoundPage(): JSX.Element {
+function NotFoundComponent(): JSX.Element {
   return (
     <div className='p-3 text-center'>
       <h1>Página não encontrada</h1>
@@ -12,4 +12,4 @@ function NotFoundPage(): JSX.Element {
   );
 }
 
-export default NotFoundPage;
+export default NotFoundComponent;

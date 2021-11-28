@@ -4,7 +4,7 @@ import { NotFoundPage } from '../../page-objects/not-found.page';
 
 const notFoundPage = new NotFoundPage();
 
-context('Módulo Página não encontrada', () => {
+context('Componente Página não encontrada', () => {
   beforeEach(() => {
     cy.visit(notFoundPage.url);
   });

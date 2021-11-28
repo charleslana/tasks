@@ -1,19 +1,19 @@
-import StateTaskInterface from '../interfaces/StateTaskInterface';
+import IStateTask from '../models/IStateTask';
 import TaskEnum from '../enumerations/TaskEnum';
 import { TaskContext } from '../contexts/TaskContext';
 import { useContext } from 'react';
 
 export const taskService = (): {
-  addTask: (task: StateTaskInterface) => void | undefined;
+  addTask: (task: IStateTask) => void | undefined;
   removeAllTask: () => void | undefined;
-  checkTask: (task: StateTaskInterface) => void | undefined;
-  updateTask: (task: StateTaskInterface) => void | undefined;
+  checkTask: (task: IStateTask) => void | undefined;
+  updateTask: (task: IStateTask) => void | undefined;
   removeTask: (id: number) => void | undefined;
-  tasks: StateTaskInterface[] | undefined;
-  sortedTasks: StateTaskInterface[] | undefined;
+  tasks: IStateTask[] | undefined;
+  sortedTasks: IStateTask[] | undefined;
 } => {
   const { tasks, sortedTasks, dispatch } = useContext(TaskContext);
-  const addTask = (task: StateTaskInterface) =>
+  const addTask = (task: IStateTask) =>
     dispatch?.({
       type: TaskEnum.ADD_TASK,
       task: {
@@ -23,7 +23,7 @@ export const taskService = (): {
         createdAt: task.createdAt,
       },
     });
-  const checkTask = (task: StateTaskInterface) =>
+  const checkTask = (task: IStateTask) =>
     dispatch?.({
       type: TaskEnum.CHECK_TASK,
       task: {
@@ -42,7 +42,7 @@ export const taskService = (): {
       type: TaskEnum.REMOVE_TASK,
       id: id,
     });
-  const updateTask = (task: StateTaskInterface) =>
+  const updateTask = (task: IStateTask) =>
     dispatch?.({
       type: TaskEnum.UPDATE_TASK,
       task: {

@@ -1,4 +1,4 @@
-export default interface StateTaskInterface {
+export default interface IStateTask {
   id: number;
   description: string;
   completed: boolean;

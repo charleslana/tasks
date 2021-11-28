@@ -1,5 +1,5 @@
 import LoaderEnum from '../enumerations/LoaderEnum';
 
-export default interface ActionLoaderInterface {
+export default interface IActionLoader {
   type: LoaderEnum;
 }

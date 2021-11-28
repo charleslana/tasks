@@ -1,6 +1,6 @@
 import AboutPage from '../../modules/about/pages/AboutPage';
 import NavbarComponent from '../../modules/tasks/components/NavbarComponent';
-import NotFoundPage from '../pages/NotFoundPage';
+import NotFoundComponent from '../components/NotFoundComponent';
 import React from 'react';
 import TaskDetailsPage from '../../modules/tasks/pages/TaskDetailsPage';
 import TaskPage from '../../modules/tasks/pages/TaskPage';
@@ -14,7 +14,7 @@ function index(): JSX.Element {
         <Route path='/' element={<TaskPage />} />
         <Route path='/task/:id' element={<TaskDetailsPage />} />
         <Route path='/about' element={<AboutPage />} />
-        <Route path='*' element={<NotFoundPage />} />
+        <Route path='*' element={<NotFoundComponent />} />
       </Routes>
     </Router>
   );

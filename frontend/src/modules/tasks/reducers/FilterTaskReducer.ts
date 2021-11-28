@@ -1,10 +1,10 @@
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
+import IStateTask from '../models/IStateTask';
 
 const FilterTaskReducer = (
-  state: StateTaskInterface[],
+  state: IStateTask[],
   action: FilterTaskEnum
-): StateTaskInterface[] => {
+): IStateTask[] => {
   switch (action) {
     case FilterTaskEnum.SHOW_ACTIVE:
       return state?.filter(task => !task.completed);

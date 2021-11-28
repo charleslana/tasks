@@ -1,13 +1,13 @@
-import PropsContextInterface from '../interfaces/PropsContextInterface';
+import IPropsContext from '../models/IPropsContext';
+import IStateToast from '../models/IStateToast';
+import IToastContext from '../models/IToastContext';
 import React, { createContext, useReducer } from 'react';
-import StateToastInterface from '../interfaces/StateToastInterface';
-import ToastContextInterface from '../interfaces/ToastContextInterface';
 import toastReducer from '../reducers/ToastReducer';
 
-export const ToastContext = createContext<ToastContextInterface>({});
+export const ToastContext = createContext<IToastContext>({});
 
-const ToastContextProvider = (props: PropsContextInterface): JSX.Element => {
-  const initialState: StateToastInterface = {
+const ToastContextProvider = (props: IPropsContext): JSX.Element => {
+  const initialState: IStateToast = {
     toast: false,
   };
   const [state, dispatch] = useReducer(toastReducer, initialState);

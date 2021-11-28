@@ -1,7 +1,7 @@
+import IStateTask from '../models/IStateTask';
 import Loading from '../../../shared/components/Loading';
 import React, { useEffect, useState } from 'react';
 import showTaskService from '../services/ShowTaskService';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ function TaskDetailsPage(): JSX.Element {
   const { id } = useParams();
   const { showLoading, hideLoading } = loaderService();
   const { showAlert } = alertService();
-  const [task, setTask] = useState<StateTaskInterface>();
+  const [task, setTask] = useState<IStateTask>();
 
   useEffect(() => {
     showTask(id);

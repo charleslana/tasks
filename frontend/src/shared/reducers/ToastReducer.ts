@@ -1,11 +1,11 @@
-import ActionToastInterface from '../interfaces/ActionToastInterface';
-import StateToastInterface from '../interfaces/StateToastInterface';
+import IActionToast from '../models/IActionToast';
+import IStateToast from '../models/IStateToast';
 import ToastEnum from '../enumerations/ToastEnum';
 
 const toastReducer = (
-  state: StateToastInterface,
-  action: ActionToastInterface
-): StateToastInterface => {
+  state: IStateToast,
+  action: IActionToast
+): IStateToast => {
   switch (action.type) {
     case ToastEnum.HIDE_TOAST:
       return {

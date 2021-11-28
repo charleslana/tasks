@@ -1,11 +1,11 @@
-import ActionLoaderInterface from '../interfaces/ActionLoaderInterface';
+import IActionLoader from '../models/IActionLoader';
+import IStateLoader from '../models/IStateLoader';
 import LoaderEnum from '../enumerations/LoaderEnum';
-import StateLoaderInterface from '../interfaces/StateLoaderInterface';
 
 const loaderReducer = (
-  state: StateLoaderInterface,
-  action: ActionLoaderInterface
-): StateLoaderInterface => {
+  state: IStateLoader,
+  action: IActionLoader
+): IStateLoader => {
   switch (action.type) {
     case LoaderEnum.HIDE_LOADER:
       return {

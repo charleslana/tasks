@@ -1,8 +1,8 @@
 import addTaskRequest from '../services/CreateTaskService';
-import FormAddTaskInterface from '../interfaces/FormAddTaskInterface';
 import getTasksRequest from '../services/ListTaskService';
+import IAddTask from '../models/IAddTask';
+import IStateTask from '../models/IStateTask';
 import React, { useEffect } from 'react';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
@@ -18,7 +18,7 @@ function AddTaskComponent(): JSX.Element {
   const { showLoading, hideLoading } = loaderService();
   const { showToast } = toastService();
   const { showAlert } = alertService();
-  const initialValues: FormAddTaskInterface = { description: '' };
+  const initialValues: IAddTask = { description: '' };
 
   useEffect(() => {
     getAllTasks();
@@ -35,18 +35,18 @@ function AddTaskComponent(): JSX.Element {
     }
   };
 
-  const dispatchAddAllTask = (tasks: StateTaskInterface[]) => {
+  const dispatchAddAllTask = (tasks: IStateTask[]) => {
     tasks.forEach(task => addTask(task));
   };
 
-  const dispatchAddTask = (task: StateTaskInterface) => {
+  const dispatchAddTask = (task: IStateTask) => {
     addTask(task);
   };
 
   const formik = useFormik({
     initialValues: initialValues,
-    validate: (data: FormAddTaskInterface) => {
-      const errors: FormikErrors<FormAddTaskInterface> = {};
+    validate: (data: IAddTask) => {
+      const errors: FormikErrors<IAddTask> = {};
       if (!data.description.trim()) {
         errors.description = 'O campo da descrição é obrigatório.';
       }

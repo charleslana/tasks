@@ -1,10 +1,10 @@
 import Api from '../../../shared/config/Api';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
+import IStateTask from '../models/IStateTask';
 
 export const arrayCompletedTaskService = async (
   ids: number[]
-): Promise<StateTaskInterface[]> => {
-  let tasks: StateTaskInterface[] = [];
+): Promise<IStateTask[]> => {
+  let tasks: IStateTask[] = [];
   await Api.put('/task/completed', {
     idsCompleted: ids,
   })
@@ -21,8 +21,8 @@ export const arrayCompletedTaskService = async (
 };
 
 export const completedTaskService = async (
-  task: StateTaskInterface
-): Promise<StateTaskInterface> => {
+  task: IStateTask
+): Promise<IStateTask> => {
   await Api.put(`/task/completed/${task.id}`)
     .then(response => {
       task = response.data;
@@ -36,9 +36,7 @@ export const completedTaskService = async (
   return task;
 };
 
-const updateTaskService = async (
-  task: StateTaskInterface
-): Promise<StateTaskInterface> => {
+const updateTaskService = async (task: IStateTask): Promise<IStateTask> => {
   await Api.put(`/task/${task.id}`, {
     description: task.description,
   })

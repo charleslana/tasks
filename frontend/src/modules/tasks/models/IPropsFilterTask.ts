@@ -1,6 +1,6 @@
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 
-export default interface PropsFilterTaskInterface {
+export default interface IPropsFilterTask {
   filterTask: (filter: FilterTaskEnum) => void;
   clearTasks: () => void;
 }

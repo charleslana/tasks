@@ -1,13 +1,13 @@
-import LoaderContextInterface from '../interfaces/LoaderContextInterface';
+import ILoaderContext from '../models/ILoaderContext';
+import IPropsContext from '../models/IPropsContext';
+import IStateLoader from '../models/IStateLoader';
 import loaderReducer from '../reducers/LoaderReducer';
-import PropsContextInterface from '../interfaces/PropsContextInterface';
 import React, { createContext, useReducer } from 'react';
-import StateLoaderInterface from '../interfaces/StateLoaderInterface';
 
-export const LoaderContext = createContext<LoaderContextInterface>({});
+export const LoaderContext = createContext<ILoaderContext>({});
 
-const LoaderContextProvider = (props: PropsContextInterface): JSX.Element => {
-  const initialState: StateLoaderInterface = {
+const LoaderContextProvider = (props: IPropsContext): JSX.Element => {
+  const initialState: IStateLoader = {
     loading: false,
   };
   const [state, dispatch] = useReducer(loaderReducer, initialState);

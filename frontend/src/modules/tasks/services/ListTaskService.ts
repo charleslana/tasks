@@ -1,8 +1,8 @@
 import Api from '../../../shared/config/Api';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
+import IStateTask from '../models/IStateTask';
 
-const listTaskService = async (): Promise<StateTaskInterface[]> => {
-  let tasks: StateTaskInterface[] = [];
+const listTaskService = async (): Promise<IStateTask[]> => {
+  let tasks: IStateTask[] = [];
   await Api.get('/task')
     .then(response => {
       tasks = response.data;

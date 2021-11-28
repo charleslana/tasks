@@ -2,9 +2,9 @@ import deleteTaskService from '../services/DeleteTaskService';
 import FilterTaskComponent from './FilterTaskComponent';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import FilterTaskReducer from '../reducers/FilterTaskReducer';
-import FormUpdateTaskInterface from '../interfaces/FormUpdateTaskInterface';
+import IStateTask from '../models/IStateTask';
+import IUpdateTask from '../models/IUpdateTask';
 import React, { useEffect, useState } from 'react';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
@@ -36,8 +36,8 @@ function TasksListComponent(): JSX.Element {
   const initialIsCheck: string[] = [];
   const [isCheck, setIsCheck] = useState(initialIsCheck);
   const [isShowDialog, setIsShowDialog] = useState(false);
-  const [task, setTask] = useState<StateTaskInterface | null>(null);
-  const initialValues: FormUpdateTaskInterface = { editDescription: '' };
+  const [task, setTask] = useState<IStateTask | null>(null);
+  const initialValues: IUpdateTask = { editDescription: '' };
 
   useEffect(() => {
     setTasks(sortedTasks);
@@ -49,7 +49,7 @@ function TasksListComponent(): JSX.Element {
     formik.resetForm();
   };
 
-  const checkExist = (task: StateTaskInterface) => {
+  const checkExist = (task: IStateTask) => {
     const existTask = tasks?.some(
       item =>
         item.description.toLowerCase() ===
@@ -65,16 +65,16 @@ function TasksListComponent(): JSX.Element {
     setIsCheck([]);
   };
 
-  const dispatchArrayCompletedTask = (tasks: StateTaskInterface[]) => {
+  const dispatchArrayCompletedTask = (tasks: IStateTask[]) => {
     isCheck.forEach(id => {
       const taskIndex = tasks.findIndex(
-        (task: StateTaskInterface) => task.id === parseInt(id)
+        (task: IStateTask) => task.id === parseInt(id)
       );
       dispatchCompletedTask(tasks[taskIndex]);
     });
   };
 
-  const dispatchCompletedTask = (task: StateTaskInterface) => {
+  const dispatchCompletedTask = (task: IStateTask) => {
     checkTask(task);
   };
 
@@ -82,7 +82,7 @@ function TasksListComponent(): JSX.Element {
     removeTask(id);
   };
 
-  const dispatchUpdateTask = (task: StateTaskInterface) => {
+  const dispatchUpdateTask = (task: IStateTask) => {
     task.description = formik.values.editDescription.trim();
     updateTask(task);
   };
@@ -96,8 +96,8 @@ function TasksListComponent(): JSX.Element {
 
   const formik = useFormik({
     initialValues: initialValues,
-    validate: (data: FormUpdateTaskInterface) => {
-      const errors: FormikErrors<FormUpdateTaskInterface> = {};
+    validate: (data: IUpdateTask) => {
+      const errors: FormikErrors<IUpdateTask> = {};
       if (!data.editDescription.trim()) {
         errors.editDescription = 'O campo da descrição é obrigatório.';
       }
@@ -153,7 +153,7 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const handleFinish = async (task: StateTaskInterface) => {
+  const handleFinish = async (task: IStateTask) => {
     try {
       await requestCompletedTask(task);
       setIsCheck(isCheck.filter(item => item !== task.id.toString()));
@@ -192,7 +192,7 @@ function TasksListComponent(): JSX.Element {
       .finally(() => hideLoading());
   };
 
-  const requestCompletedTask = async (task: StateTaskInterface) => {
+  const requestCompletedTask = async (task: IStateTask) => {
     showLoading();
     await completedTaskService(task)
       .then(response => {
@@ -216,7 +216,7 @@ function TasksListComponent(): JSX.Element {
       .finally(() => hideLoading());
   };
 
-  const requestUpdateTask = async (task: StateTaskInterface) => {
+  const requestUpdateTask = async (task: IStateTask) => {
     task.description = formik.values.editDescription.trim();
     showLoading();
     await updateTaskRequest(task)
@@ -240,13 +240,13 @@ function TasksListComponent(): JSX.Element {
     });
   };
 
-  const showEdit = (task: StateTaskInterface) => {
+  const showEdit = (task: IStateTask) => {
     setTask(task);
     formik.values.editDescription = task.description;
     setIsShowDialog(true);
   };
 
-  const submitUpdate = async (task: StateTaskInterface) => {
+  const submitUpdate = async (task: IStateTask) => {
     try {
       checkExist(task);
       await requestUpdateTask(task);
@@ -260,7 +260,7 @@ function TasksListComponent(): JSX.Element {
     }
   };
 
-  const actionsBodyTemplate = (task: StateTaskInterface) => {
+  const actionsBodyTemplate = (task: IStateTask) => {
     return (
       <>
         {!task.completed ? (
@@ -289,7 +289,7 @@ function TasksListComponent(): JSX.Element {
     );
   };
 
-  const checkboxBodyTemplate = (task: StateTaskInterface) => {
+  const checkboxBodyTemplate = (task: IStateTask) => {
     return (
       <>
         {!task.completed ? (
@@ -303,11 +303,11 @@ function TasksListComponent(): JSX.Element {
     );
   };
 
-  const dateBodyTemplate = (task: StateTaskInterface) => {
+  const dateBodyTemplate = (task: IStateTask) => {
     return new Date(task.createdAt).toLocaleDateString();
   };
 
-  const descriptionBodyTemplate = (task: StateTaskInterface) => {
+  const descriptionBodyTemplate = (task: IStateTask) => {
     return (
       <>
         {task.description}
@@ -317,7 +317,7 @@ function TasksListComponent(): JSX.Element {
     );
   };
 
-  const statusBodyTemplate = (task: StateTaskInterface) => {
+  const statusBodyTemplate = (task: IStateTask) => {
     return (
       <>
         {task.completed ? (

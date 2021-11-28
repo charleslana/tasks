@@ -1,11 +1,11 @@
-import ActionAlertInterface from '../interfaces/ActionAlertInterface';
 import AlertEnum from '../enumerations/AlertEnum';
-import StateAlertInterface from '../interfaces/StateAlertInterface';
+import IActionAlert from '../models/IActionAlert';
+import IStateAlert from '../models/IStateAlert';
 
 const alertReducer = (
-  state: StateAlertInterface,
-  action: ActionAlertInterface
-): StateAlertInterface => {
+  state: IStateAlert,
+  action: IActionAlert
+): IStateAlert => {
   switch (action.type) {
     case AlertEnum.HIDE_ALERT:
       return {

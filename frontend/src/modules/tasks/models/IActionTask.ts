@@ -1,6 +1,6 @@
 import TaskEnum from '../enumerations/TaskEnum';
 
-export default interface ActionTaskInterface {
+export default interface IActionTask {
   id?: number;
   task?: {
     id: number;

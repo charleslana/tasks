@@ -1,7 +1,7 @@
 import Api from '../../../shared/config/Api';
-import StateTaskInterface from '../interfaces/StateTaskInterface';
+import IStateTask from '../models/IStateTask';
 
-const showTaskService = async (id: number): Promise<StateTaskInterface> => {
+const showTaskService = async (id: number): Promise<IStateTask> => {
   let task = initialTask(id);
   await Api.get(`/task/${id}`)
     .then(response => {
@@ -16,7 +16,7 @@ const showTaskService = async (id: number): Promise<StateTaskInterface> => {
   return task;
 };
 
-const initialTask = (id: number): StateTaskInterface => {
+const initialTask = (id: number): IStateTask => {
   const init = {
     id: id,
     description: '',
