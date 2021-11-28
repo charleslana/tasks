@@ -4,3 +4,4 @@ frontend/node_modules/
 backend/ormconfig.json
 frontend/cypress/videos/
 frontend/cypress/screenshots/
+frontend/cypress/downloads/
