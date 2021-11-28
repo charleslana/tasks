@@ -9,8 +9,8 @@ const toastComponent = new ToastComponent();
 const dialogComponent = new DialogComponent();
 
 export class TaskPage {
+  textNoTask = 'Nenhuma tarefa foi encontrada.';
   url = '/';
-  #textNoTask = 'Nenhuma tarefa foi encontrada.';
 
   btnDelete() {
     return cy.get(':nth-child(5) > .p-button-danger').first();
@@ -107,8 +107,7 @@ export class TaskPage {
   removeAllTasks() {
     loadingComponent.loading();
     cy.get('td').then(element => {
-      cy.log(element[0].textContent.toString());
-      if (element[0].textContent !== this.#textNoTask) {
+      if (element[0].textContent !== this.textNoTask) {
         this.btnRemoveAll().should('be.visible');
         this.btnRemoveAll().click();
         dialogComponent.isVisible().should('be.visible');
@@ -152,7 +151,7 @@ export class TaskPage {
   }
 
   taskNotFound() {
-    return cy.get('td').should('have.text', this.#textNoTask);
+    return cy.get('td').should('have.text', this.textNoTask);
   }
 
   titleTaskDetails() {
