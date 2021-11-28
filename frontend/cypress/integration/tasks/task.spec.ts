@@ -35,7 +35,7 @@ context('Módulo Tarefas', () => {
       taskPage.createRequiredField().should('be.visible');
     });
 
-    it('Criar a tarefa com sucesso', () => {
+    it('Criar a tarefa com sucesso.', () => {
       loadingComponent.loading();
       taskPage.create(text);
     });
@@ -47,7 +47,7 @@ context('Módulo Tarefas', () => {
       dialogComponent.alertDialog().should('be.visible');
     });
 
-    it('Criar a tarefa e validar o contador', () => {
+    it('Criar a tarefa e validar o contador.', () => {
       taskPage.removeAllTasks();
       taskPage.create(text);
       taskPage.countTasksTotal().should('have.text', 1);
