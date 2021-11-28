@@ -424,6 +424,7 @@ function TasksListComponent(): JSX.Element {
         ) : (
           tasks.filter(task => !task.completed).length === 0 || (
             <Button
+              id='btnDeselectAll'
               icon='pi pi-list'
               className='m-2 fadein animation-duration-500'
               label='Desmarcar todas'

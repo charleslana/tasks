@@ -1,18 +1,17 @@
+import Loading from '../../../shared/components/Loading';
 import React, { useEffect, useState } from 'react';
 import showTaskService from '../services/ShowTaskService';
 import StateTaskInterface from '../interfaces/StateTaskInterface';
 import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
-import { BlockUI } from 'primereact/blockui';
 import { Link } from 'react-router-dom';
 import { loaderService } from '../../../shared/services/LoaderService';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { Timeline } from 'primereact/timeline';
 import { useParams } from 'react-router';
 
 function TaskDetailsPage(): JSX.Element {
   const { id } = useParams();
-  const { showLoading, hideLoading, loading } = loaderService();
+  const { showLoading, hideLoading } = loaderService();
   const { showAlert } = alertService();
   const [task, setTask] = useState<StateTaskInterface>();
 
@@ -36,20 +35,9 @@ function TaskDetailsPage(): JSX.Element {
 
   return (
     <div className='p-3 text-center'>
+      <Loading />
       {task ? (
-        <BlockUI
-          blocked={loading}
-          className='block-ui-loading'
-          fullScreen
-          template={
-            <ProgressSpinner
-              className='block-ui-spinner'
-              strokeWidth='8'
-              fill='var(--black-ground)'
-              animationDuration='.5s'
-            />
-          }
-        >
+        <>
           <h1>{task.description}</h1>
           <p>
             Status:{' '}
@@ -76,7 +64,7 @@ function TaskDetailsPage(): JSX.Element {
               </small>
             )}
           />
-        </BlockUI>
+        </>
       ) : null}
       <div>
         <Link to='/'>Voltar para a Home</Link>

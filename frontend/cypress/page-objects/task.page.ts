@@ -17,7 +17,7 @@ export class TaskPage {
   }
 
   btnDeselectAll() {
-    return cy.get('.p-3 > :nth-child(5)').first();
+    return cy.get('#btnDeselectAll');
   }
 
   btnEdit() {
