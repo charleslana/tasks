@@ -1,20 +1,25 @@
 import AppError from '../../../shared/errors/AppError';
-import CreateTaskInterface from '../interfaces/CreateTaskInterface';
-import Task from '../typeorm/entities/Task';
-import { getCustomRepository } from 'typeorm';
-import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import { ICreateTask } from '../domain/models/ICreateTask';
+import { inject, injectable } from 'tsyringe';
+import { ITask } from '../domain/models/ITask';
+import { ITasksRepository } from '../domain/repositories/ITasksRepository';
 
+@injectable()
 class CreateTaskService {
-  public async execute({ description }: CreateTaskInterface): Promise<Task> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    const taskExists = await taskRepository.findByDescription(description);
+  constructor(
+    @inject('TasksRepository') private tasksRepository: ITasksRepository
+  ) {}
+
+  public async execute({ description }: ICreateTask): Promise<ITask> {
+    const taskExists = await this.tasksRepository.findByDescription(
+      description
+    );
     if (taskExists) {
       throw new AppError('Já existe uma tarefa com a mesma descrição.');
     }
-    const task = taskRepository.create({
+    const task = await this.tasksRepository.create({
       description,
     });
-    await taskRepository.save(task);
     return task;
   }
 }

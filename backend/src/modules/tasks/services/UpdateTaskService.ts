@@ -1,29 +1,16 @@
 import AppError from '../../../shared/errors/AppError';
-import Task from '../typeorm/entities/Task';
-import UpdateTaskInterface from '../interfaces/UpdateTaskInterface';
-import { getCustomRepository } from 'typeorm';
-import { TaskRepository } from '../typeorm/repositories/TaskRepository';
-import CompletedTaskInterface, {
-  ArrayCompletedTaskInterface,
-} from '../interfaces/CompletedTaskInterface';
+import Task from '../infra/typeorm/entities/Task';
+import { ICompletedTask } from '../domain/models/ICompletedTask';
+import { ICompletedTaskIds } from '../domain/models/ICompletedTaskIds';
+import { inject, injectable } from 'tsyringe';
+import { ITasksRepository } from '../domain/repositories/ITasksRepository';
+import { IUpdateTask } from '../domain/models/IUpdateTask';
 
+@injectable()
 class UpdateTaskService {
-  public async arrayCompleted({
-    ids,
-  }: ArrayCompletedTaskInterface): Promise<Task[]> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    const tasks = await taskRepository.findByIds(ids);
-    if (tasks.length === 0) {
-      throw new AppError('Nenhuma tarefa foi encontrada.');
-    }
-    for (let index = 0; index < tasks.length; index++) {
-      this.checkNotFound(tasks[index]);
-      this.checkStatus(tasks[index]);
-      tasks[index].completed = true;
-    }
-    await taskRepository.save(tasks);
-    return tasks;
-  }
+  constructor(
+    @inject('TasksRepository') private tasksRepository: ITasksRepository
+  ) {}
 
   private checkNotFound(task: Task | undefined) {
     if (!task) {
@@ -40,30 +27,41 @@ class UpdateTaskService {
     }
   }
 
-  public async completed({ id }: CompletedTaskInterface): Promise<Task> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    let task = await taskRepository.findOne(id);
+  public async completed({ id }: ICompletedTask): Promise<Task> {
+    let task = await this.tasksRepository.findById(id);
     task = this.checkNotFound(task);
     this.checkStatus(task);
     task.completed = true;
-    await taskRepository.save(task);
+    await this.tasksRepository.save(task);
     return task;
   }
 
-  public async execute({
-    id,
-    description,
-  }: UpdateTaskInterface): Promise<Task> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    let task = await taskRepository.findOne(id);
+  public async completedIds({ ids }: ICompletedTaskIds): Promise<Task[]> {
+    const tasks = await this.tasksRepository.findByIds(ids);
+    if (tasks.length === 0) {
+      throw new AppError('Nenhuma tarefa foi encontrada.');
+    }
+    for (let index = 0; index < tasks.length; index++) {
+      this.checkNotFound(tasks[index]);
+      this.checkStatus(tasks[index]);
+      tasks[index].completed = true;
+    }
+    await this.tasksRepository.saveAll(tasks);
+    return tasks;
+  }
+
+  public async execute({ id, description }: IUpdateTask): Promise<Task> {
+    let task = await this.tasksRepository.findById(id);
     task = this.checkNotFound(task);
     this.checkStatus(task);
-    const taskExists = await taskRepository.findByDescription(description);
+    const taskExists = await this.tasksRepository.findByDescription(
+      description
+    );
     if (taskExists && description !== task.description) {
       throw new AppError('Já existe uma tarefa com a mesma descrição.');
     }
     task.description = description;
-    await taskRepository.save(task);
+    await this.tasksRepository.save(task);
     return task;
   }
 }

@@ -1,25 +1,28 @@
 import AppError from '../../../shared/errors/AppError';
-import DeleteTaskInterface from '../interfaces/DeleteTaskInterface';
-import { getCustomRepository } from 'typeorm';
-import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import { IDeleteTask } from '../domain/models/IDeleteTask';
+import { inject, injectable } from 'tsyringe';
+import { ITasksRepository } from '../domain/repositories/ITasksRepository';
 
+@injectable()
 class DeleteTaskService {
+  constructor(
+    @inject('TasksRepository') private tasksRepository: ITasksRepository
+  ) {}
+
   public async clear(): Promise<void> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    const task = await taskRepository.count();
+    const task = await this.tasksRepository.count();
     if (!task) {
       throw new AppError('Nenhuma tarefa foi encontrada.');
     }
-    await taskRepository.clearTasks();
+    await this.tasksRepository.clearTasks();
   }
 
-  public async execute({ id }: DeleteTaskInterface): Promise<void> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    const task = await taskRepository.findOne(id);
+  public async execute({ id }: IDeleteTask): Promise<void> {
+    const task = await this.tasksRepository.findById(id);
     if (!task) {
       throw new AppError('Tarefa não encontrada.');
     }
-    await taskRepository.remove(task);
+    await this.tasksRepository.remove(task);
   }
 }
 

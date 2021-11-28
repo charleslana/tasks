@@ -3,7 +3,7 @@ import { BlockUI } from 'primereact/blockui';
 import { loaderService } from '../services/LoaderService';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-function Loading() {
+function Loading(): JSX.Element {
   const { loading } = loaderService();
 
   return (

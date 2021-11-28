@@ -1,22 +1,22 @@
-import CreateHistoricInterface from '../interfaces/CreateHistoricInterface';
-import { getCustomRepository } from 'typeorm';
-import { HistoricRepository } from '../typeorm/repositories/HistoricRepository';
+import { ICreateHistoric } from '../domain/models/ICreateHistoric';
+import { IHistoriesRepository } from '../domain/repositories/IHistoriesRepository';
+import { inject, injectable } from 'tsyringe';
 
+@injectable()
 class CreateHistoricService {
-  public async execute({
-    description,
-    task,
-  }: CreateHistoricInterface): Promise<void> {
-    const historicRepository = getCustomRepository(HistoricRepository);
-    const lastHistoricExists = await historicRepository.findByLastHistoric(
-      task.id
-    );
+  constructor(
+    @inject('HistoriesRepository')
+    private historiesRepository: IHistoriesRepository
+  ) {}
+
+  public async execute({ description, task }: ICreateHistoric): Promise<void> {
+    const lastHistoricExists =
+      await this.historiesRepository.findByLastHistoric(task.id);
     if (lastHistoricExists?.description !== description) {
-      const historic = historicRepository.create({
+      await this.historiesRepository.create({
         description,
         task: task,
       });
-      await historicRepository.save(historic);
     }
   }
 }

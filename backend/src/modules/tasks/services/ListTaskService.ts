@@ -1,11 +1,15 @@
-import Task from '../typeorm/entities/Task';
-import { getCustomRepository } from 'typeorm';
-import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import Task from '../infra/typeorm/entities/Task';
+import { inject, injectable } from 'tsyringe';
+import { ITasksRepository } from '../domain/repositories/ITasksRepository';
 
+@injectable()
 class ListTaskService {
-  public async execute(): Promise<Task[]> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    const tasks = await taskRepository.find();
+  constructor(
+    @inject('TasksRepository') private tasksRepository: ITasksRepository
+  ) {}
+
+  public async execute(): Promise<Task[] | undefined> {
+    const tasks = await this.tasksRepository.findAll();
     return tasks;
   }
 }

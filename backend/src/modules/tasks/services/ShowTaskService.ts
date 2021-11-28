@@ -1,13 +1,17 @@
 import AppError from '../../../shared/errors/AppError';
-import ShowTaskInterface from '../interfaces/ShowTaskInterface';
-import Task from '../typeorm/entities/Task';
-import { getCustomRepository } from 'typeorm';
-import { TaskRepository } from '../typeorm/repositories/TaskRepository';
+import Task from '../infra/typeorm/entities/Task';
+import { inject, injectable } from 'tsyringe';
+import { IShowTask } from '../domain/models/IShowTask';
+import { ITasksRepository } from '../domain/repositories/ITasksRepository';
 
+@injectable()
 class ShowTaskService {
-  public async execute({ id }: ShowTaskInterface): Promise<Task> {
-    const taskRepository = getCustomRepository(TaskRepository);
-    const task = await taskRepository.findByIdWithHistories(id);
+  constructor(
+    @inject('TasksRepository') private tasksRepository: ITasksRepository
+  ) {}
+
+  public async execute({ id }: IShowTask): Promise<Task> {
+    const task = await this.tasksRepository.findByIdWithHistories(id);
     if (!task) {
       throw new AppError('Tarefa não encontrada.');
     }
