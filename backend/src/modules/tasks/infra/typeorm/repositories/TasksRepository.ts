@@ -10,7 +10,7 @@ export class TasksRepository implements ITasksRepository {
     this.ormRepository = getRepository(Task);
   }
 
-  public async clearTasks(): Promise<void> {
+  public async clear(): Promise<void> {
     await this.ormRepository.createQueryBuilder('tasks').delete().execute();
   }
 

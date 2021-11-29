@@ -1,11 +1,11 @@
 import AppError from '../../../shared/errors/AppError';
 import Task from '../infra/typeorm/entities/Task';
+import { ICompleteIdsTask } from '../domain/models/ICompleteIdsTask';
 import { inject, injectable } from 'tsyringe';
 import { ITasksRepository } from '../domain/repositories/ITasksRepository';
-import { IUpdateTask } from '../domain/models/IUpdateTask';
 
 @injectable()
-class UpdateTaskService {
+class CompleteIdsTaskService {
   constructor(
     @inject('TasksRepository') private tasksRepository: ITasksRepository
   ) {}
@@ -25,20 +25,19 @@ class UpdateTaskService {
     }
   }
 
-  public async execute({ id, description }: IUpdateTask): Promise<Task> {
-    let task = await this.tasksRepository.findById(id);
-    task = this.checkNotFound(task);
-    this.checkStatus(task);
-    const taskExists = await this.tasksRepository.findByDescription(
-      description
-    );
-    if (taskExists && description !== task.description) {
-      throw new AppError('Já existe uma tarefa com a mesma descrição.');
+  public async execute({ ids }: ICompleteIdsTask): Promise<Task[]> {
+    const tasks = await this.tasksRepository.findByIds(ids);
+    if (tasks.length === 0) {
+      throw new AppError('Nenhuma tarefa foi encontrada.');
     }
-    task.description = description;
-    await this.tasksRepository.save(task);
-    return task;
+    for (let index = 0; index < tasks.length; index++) {
+      this.checkNotFound(tasks[index]);
+      this.checkStatus(tasks[index]);
+      tasks[index].completed = true;
+    }
+    await this.tasksRepository.saveAll(tasks);
+    return tasks;
   }
 }
 
-export default UpdateTaskService;
+export default CompleteIdsTaskService;

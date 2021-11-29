@@ -8,7 +8,7 @@ export class FakeTasksRepository implements ITasksRepository {
   private id = 1;
   private historic: Historic[] = [];
 
-  public async clearTasks(): Promise<void> {
+  public async clear(): Promise<void> {
     this.tasks = [];
   }
 

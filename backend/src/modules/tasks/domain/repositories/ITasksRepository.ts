@@ -2,7 +2,7 @@ import { ICreateTask } from '../models/ICreateTask';
 import { ITask } from '../models/ITask';
 
 export interface ITasksRepository {
-  clearTasks(): Promise<void>;
+  clear(): Promise<void>;
   count(): Promise<number>;
   create(data: ICreateTask): Promise<ITask>;
   findAll(): Promise<ITask[]>;

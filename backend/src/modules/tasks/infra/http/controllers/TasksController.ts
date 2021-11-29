@@ -1,3 +1,6 @@
+import ClearTaskService from '../../../services/ClearTaskService';
+import CompleteIdsTaskService from '../../../services/CompleteIdsTaskService';
+import CompleteTaskService from '../../../services/CompleteTaskService';
 import CreateHistoricService from '../../../../histories/services/CreateHistoricService';
 import CreateTaskService from '../../../services/CreateTaskService';
 import DeleteTaskService from '../../../services/DeleteTaskService';
@@ -10,30 +13,30 @@ import { Request, Response } from 'express';
 
 export default class TasksController {
   public async clear(request: Request, response: Response): Promise<Response> {
-    const deleteTaskService = container.resolve(DeleteTaskService);
-    await deleteTaskService.clear();
+    const clearTaskService = container.resolve(ClearTaskService);
+    await clearTaskService.execute();
     return response.status(204).json([]);
   }
 
-  public async completed(
+  public async complete(
     request: Request,
     response: Response
   ): Promise<Response> {
     const { id } = request.params;
-    const updateTaskService = container.resolve(UpdateTaskService);
-    const task = await updateTaskService.completed({
+    const completeTaskService = container.resolve(CompleteTaskService);
+    const task = await completeTaskService.execute({
       id: parseInt(id),
     });
     return response.json(instanceToPlain(task));
   }
 
-  public async completedIds(
+  public async completeIds(
     request: Request,
     response: Response
   ): Promise<Response> {
     const { idsCompleted } = request.body;
-    const updateTaskService = container.resolve(UpdateTaskService);
-    const tasks = await updateTaskService.completedIds({
+    const completeIdsTaskService = container.resolve(CompleteIdsTaskService);
+    const tasks = await completeIdsTaskService.execute({
       ids: idsCompleted,
     });
     return response.json(instanceToPlain(tasks));
@@ -60,7 +63,7 @@ export default class TasksController {
     return response.status(204).json([]);
   }
 
-  public async index(request: Request, response: Response): Promise<Response> {
+  public async list(request: Request, response: Response): Promise<Response> {
     const listTaskService = container.resolve(ListTaskService);
     const tasks = await listTaskService.execute();
     return response.json(instanceToPlain(tasks));

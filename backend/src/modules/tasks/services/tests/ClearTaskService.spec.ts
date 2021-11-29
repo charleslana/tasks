@@ -1,30 +1,28 @@
 import 'reflect-metadata';
 import AppError from '../../../../shared/errors/AppError';
+import ClearTaskService from '../ClearTaskService';
 import CreateTaskService from '../CreateTaskService';
-import DeleteTaskService from '../DeleteTaskService';
 import { FakeTasksRepository } from '../../domain/repositories/fakes/FakeTasksRepository';
 
 let fakeTasksRepository: FakeTasksRepository;
 let createTaskService: CreateTaskService;
-let deleteTaskService: DeleteTaskService;
+let clearTaskService: ClearTaskService;
 
-describe('Delete Task', () => {
+describe('Clear Tasks', () => {
   beforeEach(() => {
     fakeTasksRepository = new FakeTasksRepository();
     createTaskService = new CreateTaskService(fakeTasksRepository);
-    deleteTaskService = new DeleteTaskService(fakeTasksRepository);
+    clearTaskService = new ClearTaskService(fakeTasksRepository);
   });
 
-  it('Should be able to delete a task.', async () => {
+  it('Should be able to delete all the tasks.', async () => {
     await createTaskService.execute({
       description: 'Primeira tarefa',
     });
-    expect(deleteTaskService.execute({ id: 1 })).resolves.not.toThrow();
+    expect(clearTaskService.execute()).resolves.not.toThrow();
   });
 
-  it('Should not be able to delete a task with a non-existent id.', async () => {
-    expect(deleteTaskService.execute({ id: 0 })).rejects.toBeInstanceOf(
-      AppError
-    );
+  it('Should not be able to delete all tasks if they do not exist.', async () => {
+    expect(clearTaskService.execute()).rejects.toBeInstanceOf(AppError);
   });
 });
