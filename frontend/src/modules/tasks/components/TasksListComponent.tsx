@@ -1,3 +1,5 @@
+import completeIdsTaskService from '../services/CompleteIdsTaskService';
+import completeTaskService from '../services/CompleteTaskService';
 import deleteTaskService from '../services/DeleteTaskService';
 import FilterTaskComponent from './FilterTaskComponent';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
@@ -5,6 +7,7 @@ import FilterTaskReducer from '../reducers/FilterTaskReducer';
 import IStateTask from '../models/IStateTask';
 import IUpdateTask from '../models/IUpdateTask';
 import React, { useEffect, useState } from 'react';
+import updateTaskRequest from '../services/UpdateTaskService';
 import { alertService } from '../../../shared/services/AlertService';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
@@ -21,10 +24,6 @@ import { loaderService } from '../../../shared/services/LoaderService';
 import { ScrollTop } from 'primereact/scrolltop';
 import { taskService } from '../services/TaskService';
 import { toastService } from '../../../shared/services/ToastService';
-import updateTaskRequest, {
-  arrayCompletedTaskService,
-  completedTaskService,
-} from '../services/UpdateTaskService';
 
 function TasksListComponent(): JSX.Element {
   const { sortedTasks, updateTask, checkTask, removeTask } = taskService();
@@ -182,7 +181,7 @@ function TasksListComponent(): JSX.Element {
 
   const requestArrayCompletedTask = async (ids: number[]) => {
     showLoading();
-    await arrayCompletedTaskService(ids)
+    await completeIdsTaskService(ids)
       .then(response => {
         dispatchArrayCompletedTask(response);
       })
@@ -194,7 +193,7 @@ function TasksListComponent(): JSX.Element {
 
   const requestCompletedTask = async (task: IStateTask) => {
     showLoading();
-    await completedTaskService(task)
+    await completeTaskService(task)
       .then(response => {
         dispatchCompletedTask(response);
       })

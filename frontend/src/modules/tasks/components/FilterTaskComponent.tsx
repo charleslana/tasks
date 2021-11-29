@@ -1,9 +1,9 @@
+import clearTaskService from '../services/ClearTaskService';
 import FilterTaskEnum from '../enumerations/FilterTaskEnum';
 import IPropsFilterTask from '../models/IPropsFilterTask';
 import React, { useState } from 'react';
 import { alertService } from '../../../shared/services/AlertService';
 import { Button } from 'primereact/button';
-import { clearTaskService } from '../services/DeleteTaskService';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { loaderService } from '../../../shared/services/LoaderService';
 import { TabMenu } from 'primereact/tabmenu';

@@ -1,12 +1,15 @@
 import Api from '../../../shared/config/Api';
 import IStateTask from '../models/IStateTask';
 
-const updateTaskService = async (task: IStateTask): Promise<IStateTask> => {
-  await Api.put(`/task/${task.id}`, {
-    description: task.description,
+export const completeIdsTaskService = async (
+  ids: number[]
+): Promise<IStateTask[]> => {
+  let tasks: IStateTask[] = [];
+  await Api.put('/task/complete', {
+    idsCompleted: ids,
   })
     .then(response => {
-      task = response.data;
+      tasks = response.data;
     })
     .catch(error => {
       if (error.response !== undefined) {
@@ -14,7 +17,7 @@ const updateTaskService = async (task: IStateTask): Promise<IStateTask> => {
       }
       return Promise.reject(error);
     });
-  return task;
+  return tasks;
 };
 
-export default updateTaskService;
+export default completeIdsTaskService;

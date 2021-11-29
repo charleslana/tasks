@@ -1,10 +1,10 @@
 import Api from '../../../shared/config/Api';
 import IStateTask from '../models/IStateTask';
 
-const updateTaskService = async (task: IStateTask): Promise<IStateTask> => {
-  await Api.put(`/task/${task.id}`, {
-    description: task.description,
-  })
+export const completeTaskService = async (
+  task: IStateTask
+): Promise<IStateTask> => {
+  await Api.put(`/task/complete/${task.id}`)
     .then(response => {
       task = response.data;
     })
@@ -17,4 +17,4 @@ const updateTaskService = async (task: IStateTask): Promise<IStateTask> => {
   return task;
 };
 
-export default updateTaskService;
+export default completeTaskService;

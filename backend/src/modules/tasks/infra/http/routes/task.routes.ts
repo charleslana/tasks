@@ -43,11 +43,11 @@ taskRoutes.post(
 );
 
 taskRoutes.put(
-  '/completed',
+  '/complete',
   celebrate(
     {
       [Segments.BODY]: {
-        idsCompleted: Joi.array()
+        completeIds: Joi.array()
           .items(Joi.number().required())
           .unique((a, b) => a === b)
           .required(),
@@ -75,7 +75,7 @@ taskRoutes.put(
 );
 
 taskRoutes.put(
-  '/completed/:id',
+  '/complete/:id',
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.number().required(),

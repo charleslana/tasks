@@ -1,7 +1,7 @@
 import Api from '../../../shared/config/Api';
 
-const deleteTaskService = async (id: number): Promise<void> => {
-  await Api.delete(`/task/${id}`)
+export const clearTaskService = async (): Promise<void> => {
+  await Api.delete('/task')
     .then(response => {
       return response.data;
     })
@@ -13,4 +13,4 @@ const deleteTaskService = async (id: number): Promise<void> => {
     });
 };
 
-export default deleteTaskService;
+export default clearTaskService;

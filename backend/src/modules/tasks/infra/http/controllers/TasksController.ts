@@ -34,10 +34,10 @@ export default class TasksController {
     request: Request,
     response: Response
   ): Promise<Response> {
-    const { idsCompleted } = request.body;
+    const { completeIds } = request.body;
     const completeIdsTaskService = container.resolve(CompleteIdsTaskService);
     const tasks = await completeIdsTaskService.execute({
-      ids: idsCompleted,
+      ids: completeIds,
     });
     return response.json(instanceToPlain(tasks));
   }
