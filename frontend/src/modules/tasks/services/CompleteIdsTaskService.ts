@@ -6,7 +6,7 @@ export const completeIdsTaskService = async (
 ): Promise<IStateTask[]> => {
   let tasks: IStateTask[] = [];
   await Api.put('/task/complete', {
-    idsCompleted: ids,
+    completeIds: ids,
   })
     .then(response => {
       tasks = response.data;
