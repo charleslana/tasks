@@ -18,7 +18,7 @@ class CompleteTaskService {
   }
 
   private checkStatus(task: Task | undefined) {
-    if (task?.completed) {
+    if (task && task.completed) {
       throw new AppError(
         'Não é possível atualizar uma tarefa que já se encontra finalizada.'
       );
