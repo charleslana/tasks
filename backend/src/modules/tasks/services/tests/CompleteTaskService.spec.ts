@@ -19,8 +19,11 @@ describe('Complete Task', () => {
     const task = await createTaskService.execute({
       description: 'Primeira tarefa',
     });
-    const show = await completeTaskService.execute({ id: task.id });
-    expect(show).toMatchObject({ description: task.description, id: task.id });
+    const complete = await completeTaskService.execute({ id: task.id });
+    expect(complete).toMatchObject({
+      description: task.description,
+      id: task.id,
+    });
   });
 
   it('Should not be able to complete a task with a non-existent id.', async () => {

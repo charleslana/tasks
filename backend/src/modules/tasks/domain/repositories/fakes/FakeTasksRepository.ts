@@ -20,6 +20,9 @@ export class FakeTasksRepository implements ITasksRepository {
     const task = new Task();
     task.id = this.id;
     task.description = description;
+    task.completed = false;
+    task.created_at = new Date();
+    task.updated_at = new Date();
     this.tasks.push(task);
     this.id++;
     return task;

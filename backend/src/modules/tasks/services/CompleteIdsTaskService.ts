@@ -10,15 +10,8 @@ class CompleteIdsTaskService {
     @inject('TasksRepository') private tasksRepository: ITasksRepository
   ) {}
 
-  private checkNotFound(task: Task | undefined) {
-    if (!task) {
-      throw new AppError('Tarefa não encontrada.');
-    }
-    return task;
-  }
-
   private checkStatus(task: Task | undefined) {
-    if (task?.completed) {
+    if (task && task.completed) {
       throw new AppError(
         'Não é possível atualizar uma tarefa que já se encontra finalizada.'
       );
@@ -31,7 +24,6 @@ class CompleteIdsTaskService {
       throw new AppError('Nenhuma tarefa foi encontrada.');
     }
     for (let index = 0; index < tasks.length; index++) {
-      this.checkNotFound(tasks[index]);
       this.checkStatus(tasks[index]);
       tasks[index].completed = true;
     }
