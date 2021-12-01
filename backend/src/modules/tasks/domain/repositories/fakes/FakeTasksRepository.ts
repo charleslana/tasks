@@ -18,14 +18,9 @@ export class FakeTasksRepository implements ITasksRepository {
 
   public async create({ description }: ICreateTask): Promise<Task> {
     const task = new Task();
-    const historic = new Historic();
     task.id = this.id;
     task.description = description;
     this.tasks.push(task);
-    historic.id = this.id;
-    historic.description = description;
-    historic.task = task;
-    this.historic.push(historic);
     this.id++;
     return task;
   }
@@ -54,8 +49,7 @@ export class FakeTasksRepository implements ITasksRepository {
   }
 
   public async findByIdWithHistories(id: number): Promise<Task | undefined> {
-    const historic = this.historic.find(historic => historic.task.id === id);
-    const task = this.tasks.find(task => task.id === historic?.task.id);
+    const task = this.tasks.find(task => task.id === id);
     return task;
   }
 
