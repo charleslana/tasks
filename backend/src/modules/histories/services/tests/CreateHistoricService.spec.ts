@@ -17,7 +17,18 @@ describe('Create Historic', () => {
     createTaskService = new CreateTaskService(fakeTasksRepository);
   });
 
-  it('Should be able to create a new historic.', async () => {
+  it('Should be able to create a new history when the task is initially created.', async () => {
+    const task = await createTaskService.execute({
+      description: 'Primeira tarefa',
+    });
+    const historic = await createHistoricService.execute({
+      description: 'Primeira tarefa',
+      task,
+    });
+    expect(historic).toBeUndefined();
+  });
+
+  it('Should be able to create a new history with a description different from the previous one.', async () => {
     const task = await createTaskService.execute({
       description: 'Primeira tarefa',
     });

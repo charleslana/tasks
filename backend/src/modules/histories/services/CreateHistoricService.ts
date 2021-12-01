@@ -12,7 +12,12 @@ class CreateHistoricService {
   public async execute({ description, task }: ICreateHistoric): Promise<void> {
     const lastHistoricExists =
       await this.historiesRepository.findByLastHistoric(task.id);
-    if (lastHistoricExists && lastHistoricExists.description !== description) {
+    if (!lastHistoricExists) {
+      await this.historiesRepository.create({
+        description,
+        task: task,
+      });
+    } else if (lastHistoricExists.description !== description) {
       await this.historiesRepository.create({
         description,
         task: task,
