@@ -1,4 +1,3 @@
-import Historic from '../../../../histories/infra/typeorm/entities/Historic';
 import Task from '../../../infra/typeorm/entities/Task';
 import { ICreateTask } from '../../../domain/models/ICreateTask';
 import { ITasksRepository } from '../../../domain/repositories/ITasksRepository';
@@ -6,7 +5,6 @@ import { ITasksRepository } from '../../../domain/repositories/ITasksRepository'
 export class FakeTasksRepository implements ITasksRepository {
   private tasks: Task[] = [];
   private id = 1;
-  private historic: Historic[] = [];
 
   public async clear(): Promise<void> {
     this.tasks = [];
