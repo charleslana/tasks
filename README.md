@@ -4,7 +4,7 @@
 
 # Tarefas com SOLID
 
-A brief description of what this project does and who it's for
+Que tal organizar suas tarefas de uma forma rápida e tenha um total controle delas?
 
 ## Objetivo
 
