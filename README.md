@@ -12,7 +12,7 @@ O objetivo é visar as boas práticas de um projeto SOLID.
 
 O SOLID é um acrônimo dos cinco primeiros princípios da programação orientada a objetos e design de código identificados por Robert C. Martin [refere-se ao Livro Código Limpo] conhecido como Uncle Bob.
 
-Entre eles teremos com mais frequência o **(S)** Princípio da Responsabilidade Única e **(I)** Princípio da Segregação da Interface e **(D)** Princípio da inversão da dependência.
+Entre eles teremos com mais frequência o **(S)** Princípio da Responsabilidade Única, **(I)** Princípio da Segregação da Interface e **(D)** Princípio da inversão da dependência.
 
 Vamos tratar sobre os Design Patterns (Padrões de Projeto), o Clean Code, a Inversão de dependência, a Injeção de dependência e os casos de testes automatizados.
 
