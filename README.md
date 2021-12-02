@@ -1,6 +1,4 @@
-
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
-
+![Logo](https://i.imgur.com/IUJPaJs.png)
 
 # Tarefas com SOLID
 
@@ -24,7 +22,6 @@ Os testes nos auxiliam sobre o que foi tratado em nossa regra de negócios.
 
 Além disso, vamos conhecer o poder das Framework e bibliotecas.
 
-
 ### Utilizando as boas práticas:
 
 - Fácil de se manter, adaptar e se ajustar às alterações de escopo;
@@ -41,10 +38,9 @@ Além disso, vamos conhecer o poder das Framework e bibliotecas.
 - Duplicação de código, uma alteração precisa ser feita em N pontos;
 - Fragilidade, o código quebra facilmente em vários pontos após alguma mudança.
 
-
 ## Pré-requisitos e instalação
 
-Requer o docker instalado, Não tem instalado?
+Requer o **docker** e **docker-compose** instalado, Não tem instalado?
 
 Documentação: https://docs.docker.com/desktop/
 
@@ -56,21 +52,19 @@ Documentação: https://nodejs.org/pt-br/download/
 
 ### BackEnd
 
-```bash
-  npm install
-```
-    
-#### Docker compose
+Renomear o arquivo **ormconfig.example.json** para **ormconfig.json** e ajustar a seguinte opção da configuração do arquivo.
 
 ```bash
-  ...
+  host: db
 ```
 
-#### Execute as migrations
+Após a configuração rodar o comando abaixo:
 
 ```bash
-  npm run migrate:up
+  docker-compose up
 ```
+
+**Observação:** O BackEnd vai ser instalado e iniciado automaticamente.
 
 ### FrontEnd
 
@@ -82,18 +76,7 @@ Documentação: https://nodejs.org/pt-br/download/
 
 **Obervação, caso queira executar outros scripts, você pode conferir no arquivo package.json de cada projeto.**
 
-### Postgres
-
-```bash
-  docker ps -a -q
-  docker start 'id do container'
-```
-
 ### BackEnd
-
-```bash
-  npm run dev
-```
 
 #### Execução dos Testes automatizados e coverage (Jest)
 
@@ -112,6 +95,7 @@ Documentação: https://nodejs.org/pt-br/download/
 ```bash
   npm run cy:line
 ```
+
 ## Tecnologias
 
 - JavaScript
@@ -128,6 +112,7 @@ Documentação: https://nodejs.org/pt-br/download/
 - Postman
 
 ## Bibliotecas
+
 - Express
 - Celebrate
 - Jest
@@ -140,8 +125,10 @@ Documentação: https://nodejs.org/pt-br/download/
 
 ## Demonstração
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+Testes
 
+![App Screenshot](https://i.imgur.com/V5yI506.gif)
+![App Screenshot](https://i.imgur.com/8FZpXnz.gif)
 
 ## Autores
 
@@ -152,8 +139,6 @@ Documentação: https://nodejs.org/pt-br/download/
 - [@JoaoVitorDeFreitas](https://github.com/JoaoVitorDeFreitas)
 - [@IzabelleNMP](https://github.com/IzabelleNMP)
 
-
 ## Licença
 
 [MIT](https://github.com/charleslana/tasks/blob/master/LICENSE)
-
