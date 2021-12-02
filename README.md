@@ -57,7 +57,7 @@ Documentação: https://nodejs.org/pt-br/download/
 Renomear o arquivo **ormconfig.example.json** para **ormconfig.json** e ajustar a seguinte opção da configuração do arquivo.
 
 ```bash
-  host: db
+  "host": "db",
 ```
 
 Após a configuração rodar o comando abaixo:
