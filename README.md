@@ -80,6 +80,10 @@ Após a configuração rodar o comando abaixo:
 
 ### BackEnd
 
+```bash
+  docker-compose up
+```
+
 #### Execução dos Testes automatizados e coverage (Jest)
 
 ```bash
