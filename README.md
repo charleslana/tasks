@@ -76,7 +76,7 @@ Após a configuração rodar o comando abaixo:
 
 ## Execução
 
-**Obervação, caso queira executar outros scripts, você pode conferir no arquivo package.json de cada projeto.**
+**Obervação, caso queira executar outros scripts, você pode conferir no arquivo package.json.**
 
 ### BackEnd
 
