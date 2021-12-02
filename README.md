@@ -1,5 +1,7 @@
 ![Logo](https://i.imgur.com/IUJPaJs.png)
 
+![Badge](https://img.shields.io/badge/Coverage-100%-%237159c1?style=for-the-badge&logo=jest)
+
 # Tarefas com SOLID
 
 A brief description of what this project does and who it's for
