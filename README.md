@@ -4,7 +4,7 @@
 
 # Tarefas com SOLID
 
-Que tal organizar suas tarefas de uma forma rápida e que tenha um total controle delas?
+Organize suas tarefas de uma forma rápida e fácil.
 
 ## Objetivo
 
